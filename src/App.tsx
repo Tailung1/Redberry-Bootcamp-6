@@ -1,22 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import "./App.css";
 
 function App() {
- useEffect(() => {
-   document.body.style.backgroundImage = "url('/redberyIMG.png')";
-   document.body.style.backgroundSize = "cover";
-   document.body.style.backgroundPosition = "center";
-   document.body.style.margin = "0"; 
-   document.body.style.height = "100vh";
+  useEffect(() => {
+    document.body.classList.add(
+      "bg-cover",
+      "bg-center",
+      "m-0",
+      "h-screen"
+    );
+    document.body.style.backgroundImage = "url('/redberyIMG.png')";
 
-   return () => {
-     document.body.style.backgroundImage = "";
-   };
- }, []);
+    return () => {
+      document.body.style.backgroundImage = "";
+    };
+  }, []);
 
   return (
-    <div className='relative '>
+    <>
       <div className='px-[70px]'>
         <img
           className='my-[25px]'
@@ -35,7 +37,7 @@ function App() {
         src='/logo2.png'
         alt=''
       />
-    </div>
+    </>
   );
 }
 
