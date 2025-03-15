@@ -21,6 +21,10 @@ function App() {
         <img className="my-[25px]" src='./logo.png' alt='redberry logo' />
         <hr className='bg-[#1A1A1A] h-[1px] border-none' />
       </div>
+      <div className="h-[100vh] flex flex-col  justify-center items-center">
+        <button>Click</button>
+        <img src="/logo2.png" alt="" />
+      </div>
     </div>
   );
 }
