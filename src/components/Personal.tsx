@@ -128,7 +128,7 @@ export default function Personal() {
 
       <div className='bg-white  p-4'>
         <div className='flex items-center mt-[68px] ml-[80px]'>
-          <div className='flex flex-col gap-[20px]'>
+          <div className='flex relative flex-col gap-[20px]'>
             <div className='text-[34px] leading-normal flex gap-[10px] className="h-[40px] text-[#F93B1D]'>
               <span>{name}</span>
 
@@ -158,13 +158,18 @@ export default function Personal() {
                 </span>
               </div>
             )}
+            <img
+              className=' mt-[530px] w-[42px] h-[42px]'
+              src={starIMG}
+              alt='star image with red background'
+            />
           </div>
           <div className='h-[40px]'>
             {image && (
               <img
                 src={image}
                 alt='Uploaded'
-                className=' fixed right-20 top-20 w-[230px] h-[230px] object-cover rounded-full'
+                className=' absolute right-20 top-20 w-[230px] h-[230px] object-cover rounded-full'
               />
             )}
           </div>
