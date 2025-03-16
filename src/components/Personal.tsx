@@ -4,8 +4,13 @@ import starIMG from "../assets/star.png";
 import atIMG from "../assets/at.svg";
 import phoneIMG from "../assets/phone.svg";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import Experince from "./Experince";
+import InputField from "../InputField";
 
 export default function Personal() {
+  const navigate = useNavigate();
+
   const [page, setPage] = useState<number>(1);
   const [image, setImage] = useState<null | string>(null);
 
@@ -35,7 +40,12 @@ export default function Personal() {
     <div className='flex'>
       <div className='bg-[#F9F9F9]   flex flex-col w-1/2 p-5'>
         <div className='flex w-full items-center space-x-4'>
-          <img src={arrowIMG} alt='' />
+          <img
+            onClick={() => navigate("/")}
+            className='cursor-pointer'
+            src={arrowIMG}
+            alt=''
+          />
           <div className='flex flex-col gap-[15px] w-full'>
             <div className='flex justify-between'>
               <h2>ᲞᲘᲠᲐᲓᲘ ᲘᲜᲤᲝ</h2>
@@ -48,28 +58,24 @@ export default function Personal() {
         <div className='mt-[30px]  pl-[55px]   pr-[14]'>
           <form className='flex flex-col gap-[35px] w-full '>
             <div className='flex  w-full gap-[24px] '>
-              <div className='flex flex-col gap-[8px] w-full '>
-                <label htmlFor='name'>Name</label>
-                <input
-                  {...register("name")}
-                  type='text'
-                  id='name'
-                  placeholder={"chicha"}
-                  className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px]'
-                />
-                <p>Min.2 Georgian Letter</p>
-              </div>
-              <div className='flex flex-col gap-[8px] w-full'>
-                <label htmlFor='lastname'>LastName</label>
-                <input
-                  {...register("lastname")}
-                  type='text'
-                  id='lastname'
-                  placeholder={"mumladze"}
-                  className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px]'
-                />
-                <p>Min.2 Georgian Letter</p>
-              </div>
+              <InputField
+                label='Name'
+                register={register}
+                id='name'
+                placeholder='chicha'
+                errorMessage='Min.2 Georgian Letter'
+                labelClass='text-blue-500 font-bold' // Label custom styles
+                inputClass='border rounded-[4px] px-[15px] py-[6px] font-[16px]' // Input custom styles
+              />
+              <InputField
+                label='LastName'
+                register={register}
+                id='lastname'
+                placeholder='samit'
+                errorMessage='Min.2 Georgian Letter'
+                labelClass='text-blue-500 font-bold' // Label custom styles
+                inputClass='border rounded-[4px] px-[15px] py-[6px] font-[16px]'
+              />
             </div>
             <div className='flex gap-[15px] items-center'>
               <p>Upload a personal photo</p>
@@ -84,16 +90,14 @@ export default function Personal() {
                 />
               </label>
             </div>
-            <div className='flex flex-col gap-[8px]'>
-              <label htmlFor='optional'>About me (Optional)</label>
-              <input
-                {...register("optional")}
-                type='text'
-                id='optional'
-                placeholder='General info about you'
-                className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px]'
-              />
-            </div>
+            <InputField
+              label='About me (Optional)'
+              register={register}
+              id='optional'
+              placeholder='General Info about you'
+              labelClass='text-blue-500 font-bold' // Label custom styles
+              inputClass='border rounded-[4px] px-[15px] py-[6px] font-[16px]'
+            />
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor=''>Email</label>
               <input
@@ -120,7 +124,10 @@ export default function Personal() {
           </form>
         </div>
         <div className='flex justify-end '>
-          <button className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px]  w-[30px] flex  justify-center'>
+          <button
+            onClick={() => navigate("/Personal/experince")}
+            className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px]  w-[30px] flex  justify-center'
+          >
             Next
           </button>
         </div>
