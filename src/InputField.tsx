@@ -1,4 +1,4 @@
-import React from "react";
+
 
 interface InputFieldProps {
   label: string;
@@ -15,12 +15,12 @@ export default function InputField({
   id,
   register,
   placeholder = "",
-  inputClass = "",
-  labelClass = "",
+  inputClass = "border rounded-[4px] px-[15px] py-[6px] font-[16px]",
+  labelClass = "text-blue-500 font-bold",
   errorMessage = "",
 }: InputFieldProps) {
   return (
-    <div className='flex flex-col gap-[8px] w-full'>
+    <div className='flex flex-col gap-[8px] w-full '>
       <label htmlFor={id} className={labelClass}>
         {label}
       </label>
