@@ -54,7 +54,7 @@ export default function Personal() {
 
   return (
     <div className='flex'>
-      <div className='bg-[#F9F9F9] flex flex-col w-[55%] px-[90px] py-[40px]'>
+      <div className='bg-[#F9F9F9] flex flex-col w-1/2 px-[90px] py-[40px]'>
         {/* Header Section */}
         <div className='flex w-full items-center space-x-4'>
           <img
@@ -220,8 +220,8 @@ export default function Personal() {
       </div>
 
       {/* Summary Section */}
-      <div className='bg-white p-4'>
-        <div className='flex items-center mt-[68px] ml-[80px]'>
+      <div className='bg-white '>
+        <div className='flex items-center mt-[68px] ml-[50px]'>
           <div className='flex relative flex-col gap-[20px]'>
             <div className='text-[34px] leading-normal flex gap-[10px] className="h-[40px] text-[#F93B1D]'>
               <span>{name}</span>
@@ -262,7 +262,7 @@ export default function Personal() {
               <img
                 src={image}
                 alt='Uploaded'
-                className='absolute right-20 top-20 w-[230px] h-[230px] object-cover rounded-full'
+                className='absolute right-10 top-20 w-[200px] h-[200px] object-cover rounded-full'
               />
             )}
           </div>
