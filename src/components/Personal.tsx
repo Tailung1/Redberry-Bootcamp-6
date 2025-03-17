@@ -77,7 +77,7 @@ export default function Personal() {
             className='flex flex-col gap-[35px] w-full'
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div className='flex w-full gap-[24px]'>
+            <div className='flex w-full gap-[60px]'>
               {/* Name Input Section */}
               <div className='flex flex-col gap-[8px] w-full'>
                 <label htmlFor='name'>Name</label>
@@ -86,8 +86,8 @@ export default function Personal() {
                     {...register("name", {
                       required: "Name input can't be empty",
                       minLength: {
-                        value: 3,
-                        message: "Min. 3 Georgian Letters",
+                        value: 2,
+                        message: "Min. 2 Georgian Letters",
                       },
                       pattern: {
                         value: /^[\u10A0-\u10FF]+$/, // This regex matches Georgian letters only
@@ -98,27 +98,34 @@ export default function Personal() {
                     id='name'
                     placeholder={"chicha"}
                     className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${
+                      errors.name || !name?.length
+                        ? "pr-[50px]" // Padding for error state
+                        : "pr-[30px]" // Default padding
+                    } ${
                       errors.name
-                        ? "border-[#EF5050]" // Red when there's an error
-                        : name?.length >= 3 // Green only after valid input
+                        ? "border-[#EF5050]"
+                        : name?.length >= 2 &&
+                          /^[\u10A0-\u10FF]+$/.test(name)
                         ? "border-[#98E37E]"
-                        : "border-gray-300" // Default gray
+                        : "border-gray-300"
                     }`}
                   />
-                  {/* Display check icon only when the input is valid */}
-                  {name?.length >= 3 && !errors.name && (
-                    <img
-                      src={check}
-                      alt='valid'
-                      className='absolute w-4 h-4 right-2 top-1/2 transform -translate-y-1/2'
-                    />
-                  )}
-                  {/* Warning icon */}
+                  {/* Display check icon only when the input is valid (3+ Georgian letters) */}
+                  {name?.length >= 2 &&
+                    /^[\u10A0-\u10FF]+$/.test(name) &&
+                    !errors.name && (
+                      <img
+                        src={check}
+                        alt='valid'
+                        className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
+                      />
+                    )}
+                  {/* Display warning icon outside of the input when there's an error */}
                   {errors.name && (
                     <img
                       src={warning}
                       alt='warning'
-                      className='absolute w-4 h-4 right-2 top-1/2 transform -translate-y-1/2'
+                      className='absolute w-5 h-5 right-[-25px] top-1/2 transform -translate-y-1/2' // 10px outside the input
                     />
                   )}
                 </div>
@@ -128,7 +135,7 @@ export default function Personal() {
                     {errors.name.message}
                   </p>
                 ) : (
-                  <p>Min.3 Letters,Georgian Letters</p>
+                  <p>Min. 3 Georgian Letters</p>
                 )}
               </div>
 
