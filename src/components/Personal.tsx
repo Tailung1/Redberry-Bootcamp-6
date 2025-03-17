@@ -89,6 +89,10 @@ export default function Personal() {
                         value: 3,
                         message: "Min. 3 Georgian Letters",
                       },
+                      pattern: {
+                        value: /^[\u10A0-\u10FF]+$/, // This regex matches Georgian letters only
+                        message: "Only Georgian letters are allowed", // Error message if input doesn't match the pattern
+                      },
                     })}
                     type='text'
                     id='name'
@@ -124,7 +128,7 @@ export default function Personal() {
                     {errors.name.message}
                   </p>
                 ) : (
-                  <p>Min. 3 Georgian Letters</p>
+                  <p>Min.3 Letters,Georgian Letters</p>
                 )}
               </div>
 
@@ -160,12 +164,11 @@ export default function Personal() {
             {/* About Me Section */}
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor='optional'>About me (Optional)</label>
-              <input
+              <textarea
                 {...register("optional")}
-                type='text'
                 id='optional'
                 placeholder='General info about you'
-                className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px]'
+                className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px ] h-[100px]'
               />
             </div>
 
