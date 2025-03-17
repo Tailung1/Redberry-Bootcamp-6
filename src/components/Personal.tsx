@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import arrowIMG from "../assets/arrow.svg";
 import starIMG from "../assets/star.png";
 import atIMG from "../assets/at.svg";
@@ -46,15 +46,17 @@ export default function Personal() {
     }
   };
 
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const handleImage = () => setIsSubmitted(true); // Mark form as submitted
+
   const onSubmit = (data: object) => {
-    event?.preventDefault();
     navigate("/personal/experince");
     console.log(data);
   };
 
   return (
     <div className='flex'>
-      <div className='bg-[#F9F9F9] flex flex-col w-1/2 px-[90px] py-[40px]'>
+      <div className='bg-[#F9F9F9] flex flex-col w-[54%] px-[90px] py-[40px]'>
         {/* Header Section */}
         <div className='flex w-full items-center space-x-4'>
           <img
@@ -80,7 +82,7 @@ export default function Personal() {
             <div className='flex w-full gap-[60px]'>
               {/* Name Input Section */}
               <div className='flex flex-col gap-[8px] w-full'>
-                <label htmlFor='name'>Name</label>
+                <label htmlFor='Name'>Name</label>
                 <div className='relative w-full'>
                   <input
                     {...register("name", {
@@ -97,11 +99,7 @@ export default function Personal() {
                     type='text'
                     id='name'
                     placeholder={"chicha"}
-                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${
-                      errors.name || !name?.length
-                        ? "pr-[50px]" // Padding for error state
-                        : "pr-[30px]" // Default padding
-                    } ${
+                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full  ${
                       errors.name
                         ? "border-[#EF5050]"
                         : name?.length >= 2 &&
@@ -135,39 +133,106 @@ export default function Personal() {
                     {errors.name.message}
                   </p>
                 ) : (
-                  <p>Min. 3 Georgian Letters</p>
+                  <p className='font-light'>
+                    Min. 3 Georgian Letters
+                  </p>
                 )}
               </div>
 
               {/* Last Name Input Section */}
               <div className='flex flex-col gap-[8px] w-full'>
-                <label htmlFor='lastname'>LastName</label>
-                <input
-                  {...register("lastname", { required: "Qswqs" })}
-                  type='text'
-                  id='lastname'
-                  placeholder={"mumladze"}
-                  className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px] w-full'
-                />
-                <p>Min.2 Georgian Letter</p>
+                <label htmlFor='lastname'>Lastname</label>
+                <div className='relative w-full'>
+                  <input
+                    {...register("lastname", {
+                      required: "LastName input can't be empty",
+                      minLength: {
+                        value: 2,
+                        message: "Min. 2 Georgian Letters",
+                      },
+                      pattern: {
+                        value: /^[\u10A0-\u10FF]+$/, // This regex matches Georgian letters only
+                        message: "Only Georgian letters are allowed",
+                      },
+                    })}
+                    type='text'
+                    id='lastname'
+                    placeholder={"chicha"}
+                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${
+                      errors.lastname || !lastName?.length
+                        ? "pr-[50px]" // Padding for error state
+                        : "pr-[30px]" // Default padding
+                    } ${
+                      errors.lastname
+                        ? "border-[#EF5050]"
+                        : lastName?.length >= 2 &&
+                          /^[\u10A0-\u10FF]+$/.test(lastName)
+                        ? "border-[#98E37E]"
+                        : "border-gray-300"
+                    }`}
+                  />
+                  {/* Display check icon only when the input is valid (3+ Georgian letters) */}
+                  {lastName?.length >= 2 &&
+                    /^[\u10A0-\u10FF]+$/.test(lastName) &&
+                    !errors.lastname && (
+                      <img
+                        src={check}
+                        alt='valid'
+                        className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
+                      />
+                    )}
+                  {/* Display warning icon outside of the input when there's an error */}
+                  {errors.lastname && (
+                    <img
+                      src={warning}
+                      alt='warning'
+                      className='absolute w-5 h-5 right-[-25px] top-1/2 transform -translate-y-1/2'
+                    />
+                  )}
+                </div>
+                {/* Show error message or placeholder */}
+                {errors.lastname ? (
+                  <p className='text-red-500'>
+                    {errors.lastname.message}
+                  </p>
+                ) : (
+                  <p className='font-light'>
+                    Min. 3 Georgian Letters
+                  </p>
+                )}
               </div>
             </div>
-
             {/* Photo Upload Section */}
             <div className='flex gap-[15px] items-center'>
               <p>Upload a personal photo</p>
               <label className='cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600'>
                 Upload Photo
                 <input
-                  {...register("image")}
+                  {...register("image", {
+                    required: "Image is required", // Add validation for image
+                  })}
                   type='file'
                   accept='image/*'
                   onChange={handleImageChange}
                   className='hidden' // Hide the actual input, style the label as the button
                 />
               </label>
-            </div>
 
+              {/* Show check icon if an image is uploaded, or warning icon if not */}
+              {isSubmitted && !image ? (
+                <img
+                  className='w-6 h-6'
+                  src={warning}
+                  alt='Warning: No image uploaded'
+                />
+              ) : image ? (
+                <img
+                  className='w-6 h-6'
+                  src={check}
+                  alt='Valid image'
+                />
+              ) : null}
+            </div>
             {/* About Me Section */}
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor='optional'>About me (Optional)</label>
@@ -178,7 +243,6 @@ export default function Personal() {
                 className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px ] h-[100px]'
               />
             </div>
-
             {/* Email Section */}
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor=''>Email</label>
@@ -190,7 +254,6 @@ export default function Personal() {
               />
               <p>Must end with @redberry.ge</p>
             </div>
-
             {/* Mobile Number Section */}
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor='mobNum'>Mobile Number</label>
@@ -205,10 +268,10 @@ export default function Personal() {
                 Must comply with the Georgian mobile number format
               </p>
             </div>
-
             {/* Submit Button */}
             <div className='flex justify-end'>
               <button
+                onClick={handleImage}
                 type='submit'
                 className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px] w-[30px] flex justify-center'
               >
