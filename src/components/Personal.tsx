@@ -10,7 +10,7 @@ import starIMG from "../assets/star.png";
 
 export default function Personal() {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(0);
   const [image, setImage] = useState<null | string>(null);
 
   const { register, handleSubmit, watch } = useForm();
@@ -25,10 +25,10 @@ export default function Personal() {
     }
   };
 
-  const nextPage = () => {
-    const paths = ["/", "/Personal/experince", "/Personal/final"];
-    navigate(paths[page]);
-  };
+  //   const nextPage = () => {
+  //     const paths = ["/", "/Personal/experince"];
+  //     navigate(paths[page]);
+  //   };
 
   return (
     <div className='flex'>
@@ -42,7 +42,7 @@ export default function Personal() {
           />
           <div className='flex flex-col gap-[15px] w-full'>
             <div className='flex justify-between'>
-              <h2>ᲞᲘᲠᲐᲓᲘ ᲘᲜᲤᲝ</h2>
+              <h2>Personal Info</h2>
               <p>{page}/3</p>
             </div>
             <hr />
@@ -99,7 +99,7 @@ export default function Personal() {
 
         <div className='flex justify-end'>
           <button
-            onClick={nextPage}
+            onClick={() => navigate("/personal/experince")}
             className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px] w-[30px] flex justify-center'
           >
             Next
