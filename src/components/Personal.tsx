@@ -5,6 +5,7 @@ import atIMG from "../assets/at.svg";
 import phoneIMG from "../assets/phone.svg";
 import check from "../assets/check.svg";
 import warning from "../assets/warning.svg";
+import IMask from "imask"; // Import IMask
 
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +47,21 @@ export default function Personal() {
     }
   };
 
+   useEffect(() => {
+     const numberInput = document.getElementById(
+       "mobNum"
+     ) as HTMLInputElement;
+     const mask = IMask(numberInput, {
+       mask: "+995 000 00 00 00", // Georgian phone number format
+       lazy: true, // Show placeholder immediately
+       overwrite: true, // Ensures no underscores appear
+     });
+
+     return () => {
+       mask.destroy(); // Clean up the mask when component unmounts
+     };
+   }, []);
+   
   const [isSubmitted, setIsSubmitted] = useState(false);
   const handleImage = () => setIsSubmitted(true); // Mark form as submitted
 
@@ -288,11 +304,13 @@ export default function Personal() {
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor='mobNum'>Mobile Number</label>
               <input
-                {...register("number")}
-                type='text'
-                id='mobNum'
-                placeholder='+995 551 12 34 56'
-                className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px]'
+                id='mobNum' // Add id for the input
+                type='tel'
+                placeholder='+995 597 63 45 16'
+                {...register("number", {
+                  required: "Mobile number can't be empty",
+                })}
+                className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
               />
               <p>
                 Must comply with the Georgian mobile number format
