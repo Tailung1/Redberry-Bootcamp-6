@@ -1,4 +1,4 @@
-
+import { RegisterOptions } from "react-hook-form"; // Import RegisterOptions from react-hook-form
 
 interface InputFieldProps {
   label: string;
@@ -8,6 +8,8 @@ interface InputFieldProps {
   inputClass?: string;
   labelClass?: string;
   errorMessage?: string;
+  error?: any;
+  validation?: RegisterOptions; // Add validation prop with correct type
 }
 
 export default function InputField({
@@ -18,20 +20,26 @@ export default function InputField({
   inputClass = "border rounded-[4px] px-[15px] py-[6px] font-[16px]",
   labelClass = "text-blue-500 font-bold",
   errorMessage = "",
+  error,
+  validation, // Receive validation here
 }: InputFieldProps) {
   return (
-    <div className='flex flex-col gap-[8px] w-full '>
+    <div className='flex flex-col gap-[8px] w-full'>
       <label htmlFor={id} className={labelClass}>
         {label}
       </label>
       <input
-        {...register(id)}
+        {...register(id, validation)} // Apply validation here
         type='text'
         id={id}
         placeholder={placeholder}
         className={inputClass}
       />
-      {errorMessage && <p>{errorMessage}</p>}
+      {error && (
+        <p className='text-[#2E2E2E] font-light'>
+          {error?.message || errorMessage}
+        </p>
+      )}
     </div>
   );
 }
