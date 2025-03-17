@@ -244,15 +244,45 @@ export default function Personal() {
               />
             </div>
             {/* Email Section */}
-            <div className='flex flex-col gap-[8px]'>
+            <div className='flex flex-col relative  gap-[8px]'>
               <label htmlFor=''>Email</label>
               <input
-                {...register("email")}
+                {...register("email", {
+                  required: "Email input can't be empty",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@redberry\.ge$/,
+                    message: "Email must end with @redberry.ge",
+                  },
+                })}
                 type='text'
-                placeholder='anzorr666@redberry.ge'
-                className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px]'
+                placeholder='balisha@redberry.ge'
+                className={`focus:outline-none focus:ring-0  border rounded-[4px] px-[15px] py-[6px] font-[16px] ${
+                  errors.email
+                    ? "border-[#EF5050]"
+                    : email?.length > 0 &&
+                      /^[a-zA-Z0-9._%+-]+@redberry\.ge$/.test(email)
+                    ? "border-[#98E37E]"
+                    : "border-gray-300"
+                }`}
               />
-              <p>Must end with @redberry.ge</p>
+              <p className='font-light'>
+                Email must end with @redberry.ge
+              </p>
+              {/^[a-zA-Z0-9._%+-]+@redberry\.ge$/.test(email) && (
+                <img
+                  src={check}
+                  alt='valid'
+                  className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
+                />
+              )}
+              {/* Display warning icon outside of the input when there's an error */}
+              {errors.email && (
+                <img
+                  src={warning}
+                  alt='warning'
+                  className='absolute w-5 h-5 right-[-25px] top-1/2 transform -translate-y-1/2'
+                />
+              )}
             </div>
             {/* Mobile Number Section */}
             <div className='flex flex-col gap-[8px]'>
