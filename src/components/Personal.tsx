@@ -47,21 +47,21 @@ export default function Personal() {
     }
   };
 
-   useEffect(() => {
-     const numberInput = document.getElementById(
-       "mobNum"
-     ) as HTMLInputElement;
-     const mask = IMask(numberInput, {
-       mask: "+995 000 00 00 00", // Georgian phone number format
-       lazy: true, // Show placeholder immediately
-       overwrite: true, // Ensures no underscores appear
-     });
+  useEffect(() => {
+    const numberInput = document.getElementById(
+      "mobNum"
+    ) as HTMLInputElement;
+    const mask = IMask(numberInput, {
+      mask: "+995 000 00 00 00", // Georgian phone number format
+      lazy: true, // Show placeholder immediately
+      overwrite: true, // Ensures no underscores appear
+    });
 
-     return () => {
-       mask.destroy(); // Clean up the mask when component unmounts
-     };
-   }, []);
-   
+    return () => {
+      mask.destroy(); // Clean up the mask when component unmounts
+    };
+  }, []);
+
   const [isSubmitted, setIsSubmitted] = useState(false);
   const handleImage = () => setIsSubmitted(true); // Mark form as submitted
 
@@ -150,7 +150,7 @@ export default function Personal() {
                   </p>
                 ) : (
                   <p className='font-light'>
-                    Min. 3 Georgian Letters
+                    Min. 2 Georgian Letters
                   </p>
                 )}
               </div>
@@ -213,7 +213,7 @@ export default function Personal() {
                   </p>
                 ) : (
                   <p className='font-light'>
-                    Min. 3 Georgian Letters
+                    Min. 2 Georgian Letters
                   </p>
                 )}
               </div>
@@ -303,19 +303,51 @@ export default function Personal() {
             {/* Mobile Number Section */}
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor='mobNum'>Mobile Number</label>
-              <input
-                id='mobNum' // Add id for the input
-                type='tel'
-                placeholder='+995 597 63 45 16'
-                {...register("number", {
-                  required: "Mobile number can't be empty",
-                })}
-                className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
-              />
-              <p>
-                Must comply with the Georgian mobile number format
+              <div className='relative w-full'>
+                <input
+                  {...register("number", {
+                    required: "Mobile number is required",
+                    minLength: {
+                      value: 17,
+                      message: "Incomplete number",
+                    },
+                  })}
+                  type='text'
+                  id='mobNum'
+                  placeholder='+995 597 63 45 16'
+                  className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${
+                    errors.number
+                      ? "border-[#EF5050]"
+                      : number?.length === 17
+                      ? "border-[#98E37E]"
+                      : "border-gray-300"
+                  }`}
+                />
+
+                {/* ✅ Check icon */}
+                {number?.length === 17 && !errors.number && (
+                  <img
+                    src={check}
+                    alt='valid'
+                    className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
+                  />
+                )}
+
+                {/* ⚠️ Warning icon */}
+                {errors.number && (
+                  <img
+                    src={warning}
+                    alt='warning'
+                    className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
+                  />
+                )}
+              </div>
+
+              <p className='font-light'>
+                Must comply with Georgian mobile number format
               </p>
             </div>
+
             {/* Submit Button */}
             <div className='flex justify-end'>
               <button
@@ -363,7 +395,7 @@ export default function Personal() {
               </div>
             )}
             <img
-              className='mt-[530px] w-[42px] h-[42px]'
+              className='mt-[670px] w-[42px] h-[42px]'
               src={starIMG}
               alt='star image with red background'
             />
