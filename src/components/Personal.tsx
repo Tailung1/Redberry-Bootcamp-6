@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import arrowIMG from "../assets/arrow.svg";
 import starIMG from "../assets/star.png";
 import atIMG from "../assets/at.svg";
@@ -9,10 +9,11 @@ import IMask from "imask"; // Import IMask
 
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
-export default function Personal() {
-  const [image, setImage] = useState<null | string>(null);
-
+interface PersonalProps {
+  image: string | null; // image can be a string (URL) or null if no image is selected
+  setImage: React.Dispatch<React.SetStateAction<string | null>>; // setImage is a function that updates the image state
+}
+export default function Personal({ image, setImage }: PersonalProps) {
   const navigate = useNavigate();
 
   interface errorTypes {
@@ -38,22 +39,27 @@ export default function Personal() {
   const email = watch("email");
   const number = watch("number");
 
+  useEffect(() => {
+    // Load the image from localStorage when the component mounts
+    const savedImage = localStorage.getItem("image");
+    if (savedImage) {
+      setImage(savedImage);
+    }
+  }, [setImage]); // Only run on mount to avoid infinite loop
+
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // ✅ define it here
-      setImage(imageUrl); // ✅ use it here
-      localStorage.setItem("image", imageUrl); // ✅ use it here
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+      localStorage.setItem("image", imageUrl);
+    } else if (image) {
+      // If no image is selected, use the previously saved image
+      setImage(image);
     }
   };
-  useEffect(() => {
-    const savedImage = localStorage.getItem("image");
-    if (savedImage) {
-      setImage(savedImage);
-    }
-  }, []);
 
   useEffect(() => {
     const numberInput = document.getElementById(
@@ -81,10 +87,11 @@ export default function Personal() {
       setValue("optional", parsedData.optional || "");
       // Add any other fields you want to pre-fill here
     }
-  }, []);
+  }, []); 
+
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const handleImage = () => setIsSubmitted(true); // Mark form as submitted
+// Mark form as submitted
 
   const onSubmit = (data: object) => {
     navigate("/personal/experince");
@@ -383,7 +390,7 @@ export default function Personal() {
             {/* Submit Button */}
             <div className='flex justify-end'>
               <button
-                onClick={handleImage}
+                onClick={() => setIsSubmitted(true)}
                 type='submit'
                 className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px] w-[30px] flex justify-center'
               >

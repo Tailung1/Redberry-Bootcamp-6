@@ -1,9 +1,17 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import arrowIMG from "../assets/arrow.svg";
 import calendar from "../assets/calendar.svg";
+import arrowIMG from "../assets/arrow.svg";
+import starIMG from "../assets/star.png";
+import atIMG from "../assets/at.svg";
+import phoneIMG from "../assets/phone.svg";
+// import IMask from "imask"; // Import IMask
 
-export default function Experience() {
+interface imageType {
+    image:string | null
+}
+
+export default function Experience({ image }: imageType) {
   const navigate = useNavigate();
 
   const [firstDate, setFirstDate] = useState("");
@@ -23,7 +31,6 @@ export default function Experience() {
     secondDateRef.current?.click();
   };
 
-  // Type the event as React.ChangeEvent<HTMLInputElement>
   const handleFirstDateChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -36,8 +43,12 @@ export default function Experience() {
     setSecondDate(e.target.value);
   };
 
+  // Get the personal data from localStorage and parse it as an object
+  const storedData = localStorage.getItem("formData");
+  const personalData = storedData ? JSON.parse(storedData) : {};
+
   return (
-    <div>
+    <div className='flex'>
       <div className='flex gap-[60px] py-[48px] pl-[48px] pr-[70px] bg-[#F9F9F9] mt-48px mb-[65px] w-1/2'>
         <div>
           <img
@@ -103,7 +114,7 @@ export default function Experience() {
 
               {/* Second Date */}
               <div className='flex flex-col relative gap-[5px] w-full'>
-                <h3>Another Date</h3>
+                <h3>Second Date</h3>
                 <input
                   type='text'
                   placeholder='Choose Date'
@@ -124,19 +135,20 @@ export default function Experience() {
                   min={
                     firstDate
                       ? new Date(
-                          new Date(firstDate).setDate(
-                            new Date(firstDate).getDate() + 1
-                          )
+                          new Date(firstDate).getTime() +
+                            24 * 60 * 60 * 1000
                         )
                           .toISOString()
                           .split("T")[0]
                       : ""
                   }
                   onChange={handleSecondDateChange}
+                  disabled={!firstDate}
                 />
                 <p>Choose Date</p>
               </div>
             </div>
+
             <div className='flex flex-col gap-[5px] w-full'>
               <p>Description</p>
               <textarea
@@ -146,6 +158,52 @@ export default function Experience() {
             </div>
           </div>
           <hr className='bg-[#1A1A1A] h-[1.2px] mt-[50px]' />
+        </div>
+      </div>
+
+      {/* Summary Section */}
+      <div className='bg-white flex '>
+        <div className='flex items-center mt-[68px] ml-[50px]'>
+          <div className='flex relative flex-col gap-[20px]'>
+            <div className='text-[34px] leading-normal flex gap-[10px]'>
+              <span>{personalData?.name}</span>
+              <span>{personalData?.lastname}</span>
+            </div>
+            <div className='h-[40px]'>
+              {personalData?.email && (
+                <div className='flex gap-[10px]'>
+                  <img src={atIMG} alt='at image' />{" "}
+                  {personalData?.email}{" "}
+                </div>
+              )}
+            </div>
+            <div className='h-[40px]'>
+              {personalData?.number && (
+                <div className='flex gap-[10px]'>
+                  <img src={phoneIMG} alt='phone image' />{" "}
+                  {personalData?.number}{" "}
+                </div>
+              )}
+            </div>
+            {personalData?.optional && (
+              <div className='h-[40px]'>
+                <p className='mb-[10px] text-[#F93B1D] text-[18px] '>
+                  About me
+                </p>
+                <span className='block max-w-[300px] break-words'>
+                  {personalData?.optional}
+                </span>
+              </div>
+            )}
+            <img
+              className='mt-[670px] w-[42px] h-[42px]'
+              src={starIMG}
+              alt='star image with red background'
+            />
+          </div>
+        </div>
+        <div>
+          {image ? <img src={image} /> : <p>image dont found</p>}
         </div>
       </div>
     </div>
