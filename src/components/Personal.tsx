@@ -29,6 +29,7 @@ export default function Personal() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<errorTypes>();
 
@@ -62,11 +63,26 @@ export default function Personal() {
     };
   }, []);
 
+  useEffect(() => {
+    const savedData = localStorage.getItem("formData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      setValue("name", parsedData.name || "");
+      setValue("lastname", parsedData.lastname || "");
+      setValue("email", parsedData.email || "");
+      setValue("number", parsedData.number || "");
+      setValue("optional", parsedData.optional || "");
+      // Add any other fields you want to pre-fill here
+    }
+  }, []);
+
   const [isSubmitted, setIsSubmitted] = useState(false);
   const handleImage = () => setIsSubmitted(true); // Mark form as submitted
 
   const onSubmit = (data: object) => {
     navigate("/personal/experince");
+    localStorage.setItem("formData", JSON.stringify(data)); // Store form data in localStorage
+
     console.log(data);
   };
 
@@ -77,7 +93,9 @@ export default function Personal() {
         <div className='flex w-full items-center space-x-4'>
           <img
             className='cursor-pointer'
-            onClick={() => navigate("/")}
+            onClick={() => {
+              navigate("/"), localStorage.removeItem("formData");
+            }}
             src={arrowIMG}
             alt=''
           />
@@ -113,6 +131,7 @@ export default function Personal() {
                       },
                     })}
                     type='text'
+                    name='name'
                     id='name'
                     placeholder={"chicha"}
                     className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full  ${
@@ -156,6 +175,10 @@ export default function Personal() {
               </div>
 
               {/* Last Name Input Section */}
+              {/* Last Name Input Section */}
+              {/* Last Name Input Section */}
+              {/* Last Name Input Section */}
+
               <div className='flex flex-col gap-[8px] w-full'>
                 <label htmlFor='lastname'>Lastname</label>
                 <div className='relative w-full'>
@@ -172,6 +195,7 @@ export default function Personal() {
                       },
                     })}
                     type='text'
+                    name='lastname'
                     id='lastname'
                     placeholder={"chicha"}
                     className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${
@@ -338,7 +362,7 @@ export default function Personal() {
                   <img
                     src={warning}
                     alt='warning'
-                    className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
+                    className='absolute w-5 h-5 right-[-25px] top-1/2 transform -translate-y-1/2'
                   />
                 )}
               </div>
