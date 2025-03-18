@@ -11,7 +11,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 export default function Personal() {
-  const [page, setPage] = useState<number>(1);
   const [image, setImage] = useState<null | string>(null);
 
   const navigate = useNavigate();
@@ -44,9 +43,17 @@ export default function Personal() {
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      const imageUrl = URL.createObjectURL(file); // ✅ define it here
+      setImage(imageUrl); // ✅ use it here
+      localStorage.setItem("image", imageUrl); // ✅ use it here
     }
   };
+  useEffect(() => {
+    const savedImage = localStorage.getItem("image");
+    if (savedImage) {
+      setImage(savedImage);
+    }
+  }, []);
 
   useEffect(() => {
     const numberInput = document.getElementById(
@@ -95,6 +102,7 @@ export default function Personal() {
             className='cursor-pointer'
             onClick={() => {
               navigate("/"), localStorage.removeItem("formData");
+              localStorage.removeItem("image");
             }}
             src={arrowIMG}
             alt=''
@@ -102,7 +110,7 @@ export default function Personal() {
           <div className='flex flex-col gap-[15px] w-full'>
             <div className='flex justify-between'>
               <h2>ᲞᲘᲠᲐᲓᲘ ᲘᲜᲤᲝ</h2>
-              <p>{page}/3</p>
+              <p>1/3</p>
             </div>
             <hr />
           </div>
