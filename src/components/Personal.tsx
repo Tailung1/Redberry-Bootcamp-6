@@ -40,6 +40,19 @@ export default function Personal({ image, setImage }: PersonalProps) {
   const number = watch("number");
 
   useEffect(() => {
+    const savedData = localStorage.getItem("formData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      setValue("name", parsedData.name || "");
+      setValue("lastname", parsedData.lastname || "");
+      setValue("email", parsedData.email || "");
+      setValue("number", parsedData.number || "");
+      setValue("optional", parsedData.optional || "");
+      // Add any other fields you want to pre-fill here
+    }
+  }, []);
+
+  useEffect(() => {
     // Load the image from localStorage when the component mounts
     const savedImage = localStorage.getItem("image");
     if (savedImage) {
@@ -60,6 +73,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
       setImage(image);
     }
   };
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const numberInput = document.getElementById(
@@ -75,23 +89,6 @@ export default function Personal({ image, setImage }: PersonalProps) {
       mask.destroy(); // Clean up the mask when component unmounts
     };
   }, []);
-
-  useEffect(() => {
-    const savedData = localStorage.getItem("formData");
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      setValue("name", parsedData.name || "");
-      setValue("lastname", parsedData.lastname || "");
-      setValue("email", parsedData.email || "");
-      setValue("number", parsedData.number || "");
-      setValue("optional", parsedData.optional || "");
-      // Add any other fields you want to pre-fill here
-    }
-  }, []); 
-
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
-// Mark form as submitted
 
   const onSubmit = (data: object) => {
     navigate("/personal/experince");
@@ -264,7 +261,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
                 Upload Photo
                 <input
                   {...register("image", {
-                    required: "Image is required", // Add validation for image
+                    validate: () => (image ? true : false),
                   })}
                   type='file'
                   accept='image/*'
@@ -390,7 +387,9 @@ export default function Personal({ image, setImage }: PersonalProps) {
             {/* Submit Button */}
             <div className='flex justify-end'>
               <button
-                onClick={() => setIsSubmitted(true)}
+                onClick={() => {
+                  setIsSubmitted(true), console.log(image);
+                }}
                 type='submit'
                 className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px] w-[30px] flex justify-center'
               >
