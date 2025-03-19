@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import arrowIMG from "../assets/arrow.svg";
 import starIMG from "../assets/star.png";
 import atIMG from "../assets/at.svg";
@@ -113,7 +113,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
           />
           <div className='flex flex-col gap-[15px] w-full'>
             <div className='flex justify-between'>
-              <h2>ᲞᲘᲠᲐᲓᲘ ᲘᲜᲤᲝ</h2>
+              <h2>Personal Info</h2>
               <p>1/3</p>
             </div>
             <hr />
