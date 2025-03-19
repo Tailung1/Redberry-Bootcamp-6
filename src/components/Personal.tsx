@@ -68,9 +68,6 @@ export default function Personal({ image, setImage }: PersonalProps) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       localStorage.setItem("image", imageUrl);
-    } else if (image) {
-      // If no image is selected, use the previously saved image
-      setImage(image);
     }
   };
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -311,8 +308,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
                 className={`focus:outline-none focus:ring-0  border rounded-[4px] px-[15px] py-[6px] font-[16px] ${
                   errors.email
                     ? "border-[#EF5050]"
-                    : email?.length > 0 &&
-                      /^[a-zA-Z0-9._%+-]+@redberry\.ge$/.test(email)
+                    : email
                     ? "border-[#98E37E]"
                     : "border-gray-300"
                 }`}
@@ -320,7 +316,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
               <p className='font-light'>
                 Email must end with @redberry.ge
               </p>
-              {/^[a-zA-Z0-9._%+-]+@redberry\.ge$/.test(email) && (
+              {email && !errors.email && (
                 <img
                   src={check}
                   alt='valid'

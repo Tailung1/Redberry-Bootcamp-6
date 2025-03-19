@@ -49,7 +49,7 @@ export default function Experience({ image }: imageType) {
 
   return (
     <div className='flex'>
-      <div className='flex gap-[60px] py-[48px] pl-[48px] pr-[70px] bg-[#F9F9F9] mt-48px mb-[65px] w-1/2'>
+      <div className='flex gap-[60px] py-[48px] pl-[48px] pr-[70px] bg-[#F9F9F9] mt-48px mb-[65px] w-[54%]'>
         <div>
           <img
             onClick={() => navigate("/personal")}
