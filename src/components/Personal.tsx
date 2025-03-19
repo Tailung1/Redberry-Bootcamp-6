@@ -153,8 +153,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
                     }`}
                   />
                   {/* Display check icon only when the input is valid (3+ Georgian letters) */}
-                  {name?.length >= 2 &&
-                    /^[\u10A0-\u10FF]+$/.test(name) &&
+                  {/^[\u10A0-\u10FF]+$/.test(name) &&
                     !errors.name && (
                       <img
                         src={check}
@@ -214,15 +213,14 @@ export default function Personal({ image, setImage }: PersonalProps) {
                     } ${
                       errors.lastname
                         ? "border-[#EF5050]"
-                        : lastName?.length >= 2 &&
+                        : !errors.lastname &&
                           /^[\u10A0-\u10FF]+$/.test(lastName)
                         ? "border-[#98E37E]"
                         : "border-gray-300"
                     }`}
                   />
                   {/* Display check icon only when the input is valid (3+ Georgian letters) */}
-                  {lastName?.length >= 2 &&
-                    /^[\u10A0-\u10FF]+$/.test(lastName) &&
+                  {/^[\u10A0-\u10FF]+$/.test(lastName) &&
                     !errors.lastname && (
                       <img
                         src={check}
