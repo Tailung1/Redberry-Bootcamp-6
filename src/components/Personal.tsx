@@ -6,6 +6,8 @@ import phoneIMG from "../assets/phone.svg";
 import check from "../assets/check.svg";
 import warning from "../assets/warning.svg";
 import IMask from "imask"; // Import IMask
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -25,13 +27,34 @@ export default function Personal({ image, setImage }: PersonalProps) {
     number: string;
   }
 
+  const schema = yup.object().shape({
+    name: yup
+      .string()
+      .required("Name input can't be empty")
+      .min(2, "Min. 2 Georgian Letters"),
+    lastname: yup
+      .string()
+      .required("LastName input can't be empty")
+      .min(2, "Min. 2 Georgian Letters"),
+    email: yup
+      .string()
+      .required("Email input can't be empty")
+      .matches(/^[a-zA-Z0-9._%+-]+@redberry\.ge$/),
+    number: yup
+      .string()
+      .required("Mobile number is required")
+      .min(17, "Incomplete number"),
+  });
+
   const {
     register,
     handleSubmit,
     watch,
     setValue,
     formState: { errors },
-  } = useForm<errorTypes>();
+  } = useForm<errorTypes>({
+    resolver: yupResolver(schema),
+  });
 
   const name = watch("name");
   const lastName = watch("lastname");
@@ -118,22 +141,23 @@ export default function Personal({ image, setImage }: PersonalProps) {
         </div>
         <div className='mt-[30px] pl-[55px] pr-[14]'>
           {/* Form Section */}
+          {/* Form Section */}
+          {/* Form Section */}
+
           <form
             className='flex flex-col gap-[35px] w-full'
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className='flex w-full gap-[60px]'>
               {/* Name Input Section */}
+              {/* Name Input Section */}
+              {/* Name Input Section */}
+
               <div className='flex flex-col gap-[8px] w-full'>
                 <label htmlFor='Name'>Name</label>
                 <div className='relative w-full'>
                   <input
                     {...register("name", {
-                      required: "Name input can't be empty",
-                      minLength: {
-                        value: 2,
-                        message: "Min. 2 Georgian Letters",
-                      },
                       pattern: {
                         value: /^[\u10A0-\u10FF]+$/, // This regex matches Georgian letters only
                         message: "Only Georgian letters are allowed", // Error message if input doesn't match the pattern
@@ -192,11 +216,6 @@ export default function Personal({ image, setImage }: PersonalProps) {
                 <div className='relative w-full'>
                   <input
                     {...register("lastname", {
-                      required: "LastName input can't be empty",
-                      minLength: {
-                        value: 2,
-                        message: "Min. 2 Georgian Letters",
-                      },
                       pattern: {
                         value: /^[\u10A0-\u10FF]+$/, // This regex matches Georgian letters only
                         message: "Only Georgian letters are allowed",
@@ -249,7 +268,12 @@ export default function Personal({ image, setImage }: PersonalProps) {
                 )}
               </div>
             </div>
+
             {/* Photo Upload Section */}
+            {/* Photo Upload Section */}
+            {/* Photo Upload Section */}
+            {/* Photo Upload Section */}
+
             <div className='flex gap-[15px] items-center'>
               <p>Upload a personal photo</p>
               <label className='cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600'>
@@ -280,7 +304,10 @@ export default function Personal({ image, setImage }: PersonalProps) {
                 />
               ) : null}
             </div>
+
             {/* About Me Section */}
+            {/* About Me Section */}
+
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor='optional'>About me (Optional)</label>
               <textarea
@@ -290,23 +317,20 @@ export default function Personal({ image, setImage }: PersonalProps) {
                 className='1px border rounded-[4px] px-[15px] py-[6px] font-[16px ] h-[100px]'
               />
             </div>
+
             {/* Email Section */}
+            {/* Email Section */}
+
             <div className='flex flex-col relative  gap-[8px]'>
               <label htmlFor=''>Email</label>
               <input
-                {...register("email", {
-                  required: "Email input can't be empty",
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@redberry\.ge$/,
-                    message: "Email must end with @redberry.ge",
-                  },
-                })}
+                {...register("email")}
                 type='text'
                 placeholder='balisha@redberry.ge'
                 className={`focus:outline-none focus:ring-0  border rounded-[4px] px-[15px] py-[6px] font-[16px] ${
                   errors.email
                     ? "border-[#EF5050]"
-                    : email
+                    : !errors.email && email
                     ? "border-[#98E37E]"
                     : "border-gray-300"
                 }`}
@@ -330,18 +354,16 @@ export default function Personal({ image, setImage }: PersonalProps) {
                 />
               )}
             </div>
+
             {/* Mobile Number Section */}
+            {/* Mobile Number Section */}
+            {/* Mobile Number Section */}
+
             <div className='flex flex-col gap-[8px]'>
               <label htmlFor='mobNum'>Mobile Number</label>
               <div className='relative w-full'>
                 <input
-                  {...register("number", {
-                    required: "Mobile number is required",
-                    minLength: {
-                      value: 17,
-                      message: "Incomplete number",
-                    },
-                  })}
+                  {...register("number")}
                   type='text'
                   id='mobNum'
                   placeholder='+995 597 63 45 16'
@@ -355,7 +377,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
                 />
 
                 {/* ✅ Check icon */}
-                {number?.length === 17 && !errors.number && (
+                {number && !errors.number && (
                   <img
                     src={check}
                     alt='valid'
