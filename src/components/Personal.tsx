@@ -44,6 +44,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
       .string()
       .required("Mobile number is required")
       .min(17, "Incomplete number"),
+    optional: yup.string().optional(), // Correctly make this field optional
   });
 
   const {
