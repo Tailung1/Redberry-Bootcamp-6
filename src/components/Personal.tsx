@@ -237,9 +237,9 @@ export default function Personal({ image, setImage }: PersonalProps) {
                     }`}
                   />
                   {/* Display check icon only when the input is valid (3+ Georgian letters) */}
-                  {/^[\u10A0-\u10FF]+$/.test(lastName) &&
-                    !errors.name &&
-                    name.length >= 2 && (
+                  {!errors.lastname &&
+                    /^[\u10A0-\u10FF]+$/.test(lastName) &&
+                    lastName.length >= 2 && (
                       <img
                         src={check}
                         alt='valid'
@@ -404,9 +404,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
             {/* Submit Button */}
             <div className='flex justify-end'>
               <button
-                onClick={() => {
-                  setIsSubmitted(true), console.log(image);
-                }}
+                onClick={() => setIsSubmitted(true)}
                 type='submit'
                 className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px] w-[30px] flex justify-center'
               >
