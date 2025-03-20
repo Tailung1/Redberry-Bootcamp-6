@@ -7,6 +7,7 @@ import Experince from "./components/Experince";
 export default function Routing() {
     
     const [image, setImage] = useState<null | string>(null);
+    const [counter,setCounter]=useState<number>(0)
   return (
     <Routes>
       <Route path='/' element={<App />} />
@@ -16,14 +17,14 @@ export default function Routing() {
           <Personal
             image={image}
             setImage={setImage}
+            counter={counter}
+            setCounter={setCounter}
           />
         }
       />
       <Route
         path='/personal/experince'
-        element={
-          <Experince  image={image} />
-        }
+        element={<Experince image={image} counter={counter} setCounter={setCounter} />}
       />
     </Routes>
   );

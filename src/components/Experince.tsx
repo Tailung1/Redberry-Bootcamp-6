@@ -8,10 +8,12 @@ import phoneIMG from "../assets/phone.svg";
 // import IMask from "imask"; // Import IMask
 
 interface imageType {
-    image:string | null
+  image: string | null;
+  counter:number
+  setCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Experience({ image }: imageType) {
+export default function Experience({ image,setCounter,counter }: imageType) {
   const navigate = useNavigate();
 
   const [firstDate, setFirstDate] = useState("");
@@ -52,7 +54,7 @@ export default function Experience({ image }: imageType) {
       <div className='flex gap-[60px] py-[48px] pl-[48px] pr-[70px] bg-[#F9F9F9] mt-48px mb-[65px] w-[54%]'>
         <div>
           <img
-            onClick={() => navigate("/personal")}
+            onClick={() => {navigate("/personal"),setCounter(counter+1)}}
             className='cursor-pointer'
             src={arrowIMG}
             alt='arrow image'
