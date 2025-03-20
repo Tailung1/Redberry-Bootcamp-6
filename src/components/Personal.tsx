@@ -11,12 +11,10 @@ import * as yup from "yup";
 
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-interface PersonalProps {
-  image: string | null; // image can be a string (URL) or null if no image is selected
-  setImage: React.Dispatch<React.SetStateAction<string | null>>;
-}
-export default function Personal({ image, setImage }: PersonalProps) {
+
+export default function Personal() {
   const navigate = useNavigate();
+  const [image, setImage] = useState<null | string>(null);
 
   type FormDataType = yup.InferType<typeof schema>;
 

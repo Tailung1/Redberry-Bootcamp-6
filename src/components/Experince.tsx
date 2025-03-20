@@ -7,14 +7,14 @@ import atIMG from "../assets/at.svg";
 import phoneIMG from "../assets/phone.svg";
 // import IMask from "imask"; // Import IMask
 
-interface imageType {
-  image: string | null;
-}
 
-export default function Experince({ image }: imageType) {
+
+export default function Experince() {
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(false);
   const [page, setPage] = useState<number>(3);
+
+  const storedImage=localStorage.getItem("image")
 
   const [firstDate, setFirstDate] = useState("");
   const [secondDate, setSecondDate] = useState("");
@@ -276,7 +276,7 @@ export default function Experince({ image }: imageType) {
       </div>
 
       {/* Summary Section */}
-      <div className='bg-white flex items-center  gap-[220px] ml-[50px] mt-[50px]  '>
+      <div className='bg-white flex   gap-[220px] ml-[50px] mt-[50px]  '>
         <div className='flex relative flex-col gap-[20px]'>
           <div className='text-[34px] leading-normal flex gap-[10px]'>
             <span>{personalData?.name}</span>
@@ -316,7 +316,11 @@ export default function Experince({ image }: imageType) {
         </div>
 
         <div>
-          {image ? <img src={image} /> : <p>image dont found</p>}
+          {storedImage ? (
+            <img src={storedImage} />
+          ) : (
+            <p>image dont found</p>
+          )}
         </div>
       </div>
     </div>
