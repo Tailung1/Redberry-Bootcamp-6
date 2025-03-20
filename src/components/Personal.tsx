@@ -131,6 +131,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
             onClick={() => {
               navigate("/"), localStorage.removeItem("formData");
               localStorage.removeItem("image");
+              setImage("");
             }}
             src={arrowIMG}
             alt=''
