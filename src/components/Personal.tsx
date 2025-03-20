@@ -18,14 +18,7 @@ interface PersonalProps {
 export default function Personal({ image, setImage }: PersonalProps) {
   const navigate = useNavigate();
 
-  interface errorTypes {
-    name: string;
-    lastname: string;
-    optional: string;
-    image: File;
-    email: string;
-    number: string;
-  }
+  type FormDataType = yup.InferType<typeof schema>;
 
   const schema = yup.object().shape({
     name: yup
@@ -44,7 +37,8 @@ export default function Personal({ image, setImage }: PersonalProps) {
       .string()
       .required("Mobile number is required")
       .min(17, "Incomplete number"),
-    optional: yup.string().optional(), // Correctly make this field optional
+    optional: yup.string(),
+    image: yup.mixed<File>(),
   });
 
   const {
@@ -53,7 +47,7 @@ export default function Personal({ image, setImage }: PersonalProps) {
     watch,
     setValue,
     formState: { errors },
-  } = useForm<errorTypes>({
+  } = useForm<FormDataType>({
     resolver: yupResolver(schema),
   });
 
