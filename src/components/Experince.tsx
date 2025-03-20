@@ -9,11 +9,9 @@ import phoneIMG from "../assets/phone.svg";
 
 interface imageType {
   image: string | null;
-  counter:number
-  setCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Experience({ image,setCounter,counter }: imageType) {
+export default function Experience({ image }: imageType) {
   const navigate = useNavigate();
 
   const [firstDate, setFirstDate] = useState("");
@@ -54,7 +52,9 @@ export default function Experience({ image,setCounter,counter }: imageType) {
       <div className='flex gap-[60px] py-[48px] pl-[48px] pr-[70px] bg-[#F9F9F9] mt-48px mb-[65px] w-[54%]'>
         <div>
           <img
-            onClick={() => {navigate("/personal"),setCounter(counter+1)}}
+            onClick={() => {
+              navigate("/personal");
+            }}
             className='cursor-pointer'
             src={arrowIMG}
             alt='arrow image'
