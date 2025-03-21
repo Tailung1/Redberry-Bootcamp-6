@@ -9,8 +9,6 @@ import check from "../assets/check.svg";
 import warning from "../assets/warning.svg";
 
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 export default function Experince() {
   const navigate = useNavigate();
@@ -52,23 +50,24 @@ export default function Experince() {
   const storedData = localStorage.getItem("formData");
   const personalData = storedData ? JSON.parse(storedData) : {};
 
-  type formDataType = yup.InferType<typeof schema>;
-
-  const schema = yup.object().shape({
-    position: yup.string().required("Position input can't be empty"),
-  });
+  type inputTypes = {
+    position: string;
+    empolyer: string;
+  };
 
   const {
     register,
     watch,
     handleSubmit,
-    setValue,
     formState: { errors },
-  } = useForm<formDataType>({ resolver: yupResolver(schema) });
+  } = useForm<inputTypes>();
 
-  const onSubmit = () => {};
+  const onSubmit = (data: object) => {
+    console.log(data);
+  };
 
-  const Wposition=watch("position")
+  const Wposition = watch("position");
+  const Wemployer = watch("empolyer");
 
   return (
     <div className='flex items-start'>
@@ -101,21 +100,33 @@ export default function Experince() {
             <div className='flex flex-col gap-[5px] relative'>
               <h3>Position</h3>
               <input
-                {...register("position")}
+                {...register("position", {
+                  required: "Position input Can't be empty",
+                  minLength: {
+                    value: 2,
+                    message: "Min 2",
+                  },
+                })}
                 type='text'
                 placeholder='developer'
-                className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
+                className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] ${
+                  errors?.position
+                    ? "border-[#EF5050]"
+                    : Wposition?.length >= 2
+                    ? "border-[#98E37E]"
+                    : "border-gray-300"
+                }`}
               />
-              {Wposition && Wposition.length < 2 && (
+              {errors.position && (
                 <img
-                  className='absolute w-6 h-6 right-[-26px] top-12 transform -translate-y-1/2'
+                  className='absolute w-5 h-5 right-[-25px] top-1/2 transform -translate-y-1/2'
                   src={warning}
                   alt='warning icon'
                 />
               )}
-              {Wposition && Wposition.length >= 2 && (
+              {Wposition?.length >= 2 && (
                 <img
-                  className='absolute w-6 h-6 right-[-26px] top-12 transform -translate-y-1/2'
+                  className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
                   src={check}
                   alt='warning icon'
                 />
@@ -126,14 +137,41 @@ export default function Experince() {
             {/* employer */}
             {/* employer */}
             {/* employer */}
-            <div className='flex flex-col gap-[5px]'>
+            <div className='flex flex-col gap-[5px] relative'>
               <h3>Employer</h3>
               <input
+                {...register("empolyer", {
+                  required: "Position input Can't be empty",
+                  minLength: {
+                    value: 2,
+                    message: "Min 2",
+                  },
+                })}
                 type='text'
                 placeholder='company'
-                className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
+                className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] ${
+                  errors.empolyer
+                    ? "border-[#EF5050]"
+                    : Wemployer?.length >= 2
+                    ? "border-[#98E37E]"
+                    : "border-gray-300"
+                }`}
               />
               <p>min.2 letters</p>
+              {errors.empolyer && (
+                <img
+                  className='absolute w-6 h-6 right-[-26px] top-12 transform -translate-y-1/2'
+                  src={warning}
+                  alt='warning icon'
+                />
+              )}
+              {Wemployer?.length >= 2 && (
+                <img
+                  className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
+                  src={check}
+                  alt='check icon'
+                />
+              )}
             </div>
             <div className='flex gap-[25px] w-full'>
               {/* First Date */}
