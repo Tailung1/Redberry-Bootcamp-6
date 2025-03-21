@@ -25,8 +25,7 @@ export default function Experince() {
   const secondDateRef = useRef<HTMLInputElement>(null);
 
   const handleFirstCalendarClick = () => {
-    firstDateRef.current?.showPicker?.();
-    firstDateRef.current?.click();
+    firstDateRef.current?.showPicker();
   };
 
   const handleSecondCalendarClick = () => {
@@ -38,12 +37,14 @@ export default function Experince() {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFirstDate(e.target.value);
+    setValue("startDate", e.target.value);
   };
 
   const handleSecondDateChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSecondDate(e.target.value);
+    setValue("endDate", e.target.value);
   };
 
   // Get the personal data from localStorage and parse it as an object
@@ -52,13 +53,16 @@ export default function Experince() {
 
   type inputTypes = {
     position: string;
-    empolyer: string;
+    employer: string;
+    startDate: string;
+    endDate: string;
   };
 
   const {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<inputTypes>();
 
@@ -67,7 +71,9 @@ export default function Experince() {
   };
 
   const Wposition = watch("position");
-  const Wemployer = watch("empolyer");
+  const Wemployer = watch("employer");
+  const Wstartdate = watch("startDate");
+  const Wenddate = watch("endDate");
 
   return (
     <div className='flex items-start'>
@@ -140,7 +146,7 @@ export default function Experince() {
             <div className='flex flex-col gap-[5px] relative'>
               <h3>Employer</h3>
               <input
-                {...register("empolyer", {
+                {...register("employer", {
                   required: "Position input Can't be empty",
                   minLength: {
                     value: 2,
@@ -150,7 +156,7 @@ export default function Experince() {
                 type='text'
                 placeholder='company'
                 className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] ${
-                  errors.empolyer
+                  errors.employer
                     ? "border-[#EF5050]"
                     : Wemployer?.length >= 2
                     ? "border-[#98E37E]"
@@ -158,7 +164,7 @@ export default function Experince() {
                 }`}
               />
               <p>min.2 letters</p>
-              {errors.empolyer && (
+              {errors.employer && (
                 <img
                   className='absolute w-6 h-6 right-[-26px] top-12 transform -translate-y-1/2'
                   src={warning}
@@ -182,8 +188,14 @@ export default function Experince() {
                 <h3>Start date</h3>
                 <input
                   type='text'
-                  placeholder='Choose Date'
-                  className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
+                  placeholder='YYYY-MM-DD'
+                  className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] ${
+                    !Wstartdate && errors.startDate
+                      ? "border-[#EF5050]"
+                      : Wstartdate
+                      ? "border-[#98E37E]"
+                      : "border-gray-300"
+                  }`}
                   value={firstDate}
                   readOnly
                 />
@@ -194,12 +206,15 @@ export default function Experince() {
                   onClick={handleFirstCalendarClick}
                 />
                 <input
+                  {...register("startDate", {
+                    required: "Start date is required",
+                  })}
                   type='date'
                   ref={firstDateRef}
                   className='hidden'
+                  value={firstDate}
                   onChange={handleFirstDateChange}
                 />
-                <p>Choose Date</p>
               </div>
 
               {/* Second Date */}
@@ -210,8 +225,14 @@ export default function Experince() {
                 <h3>End Date</h3>
                 <input
                   type='text'
-                  placeholder='Choose Date'
-                  className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
+                  placeholder='YYYY-MM-DD'
+                  className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] ${
+                    errors.endDate && !Wenddate
+                      ? "border-[#EF5050]"
+                      : Wenddate
+                      ? "border-[#98E37E]"
+                      : "border-gray-300"
+                  }`}
                   value={secondDate}
                   readOnly
                 />
@@ -222,6 +243,9 @@ export default function Experince() {
                   onClick={handleSecondCalendarClick}
                 />
                 <input
+                  {...register("endDate", {
+                    required: "End date required",
+                  })}
                   type='date'
                   ref={secondDateRef}
                   style={{ display: "none" }}
@@ -238,7 +262,6 @@ export default function Experince() {
                   onChange={handleSecondDateChange}
                   disabled={!firstDate}
                 />
-                <p>Choose Date</p>
               </div>
             </div>
             <div className='flex flex-col gap-[5px] w-full'>
@@ -283,7 +306,7 @@ export default function Experince() {
                   <h3>Birthdate</h3>
                   <input
                     type='text'
-                    placeholder='Choose Date'
+                    placeholder='YYYY-MM-DD'
                     className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
                     value={firstDate}
                     readOnly
@@ -300,7 +323,6 @@ export default function Experince() {
                     style={{ display: "none" }}
                     onChange={handleFirstDateChange}
                   />
-                  <p>Choose Date</p>
                 </div>
 
                 {/* Second Date */}
@@ -308,7 +330,7 @@ export default function Experince() {
                   <h3>Second Date</h3>
                   <input
                     type='text'
-                    placeholder='Choose Date'
+                    placeholder='YYYY-MM-DD'
                     className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
                     value={secondDate}
                     readOnly
@@ -336,7 +358,6 @@ export default function Experince() {
                     onChange={handleSecondDateChange}
                     disabled={!firstDate}
                   />
-                  <p>Choose Date</p>
                 </div>
               </div>
 
