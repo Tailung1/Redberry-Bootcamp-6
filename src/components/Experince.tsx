@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import calendar from "../assets/calendar.svg";
 import arrowIMG from "../assets/arrow.svg";
@@ -57,6 +57,11 @@ export default function Experince() {
     startDate: string;
     endDate: string;
     description: string;
+    position2: string;
+    employer2: string;
+    startDate2: string;
+    endDate2: string;
+    description2: string;
   };
 
   const {
@@ -68,7 +73,9 @@ export default function Experince() {
   } = useForm<inputTypes>();
 
   const onSubmit = (data: object) => {
-    console.log(data);
+    if (show && !inputCheck2) return;
+    localStorage.setItem("storageExperince", JSON.stringify(data));
+    navigate("/personal/experince/education");
   };
 
   const Wposition = watch("position");
@@ -77,9 +84,38 @@ export default function Experince() {
   const Wenddate = watch("endDate");
   const Wdescription = watch("description");
 
+  const Wposition2 = watch("position2");
+  const Wemployer2 = watch("employer2");
+  const Wstartdate2 = watch("startDate2");
+  const Wenddate2 = watch("endDate2");
+  const Wdescriptio2 = watch("description2");
+
+  useEffect(() => {
+    const storagedExperince = localStorage.getItem(
+      "storageExperince"
+    );
+    if (storagedExperince) {
+      const parsedExperince = JSON.parse(storagedExperince);
+      setValue("position", parsedExperince.position);
+      setValue("employer", parsedExperince.employer);
+      setValue("startDate", parsedExperince.startDate);
+      setValue("endDate", parsedExperince.endDate);
+      setValue("description", parsedExperince.description);
+    }
+  }, []);
+
+  const inputCheck =
+    Wposition || Wemployer || Wstartdate || Wenddate || Wdescription;
+  const inputCheck2 =
+    Wposition2 ||
+    Wemployer2 ||
+    Wstartdate2 ||
+    Wenddate2 ||
+    Wdescriptio2;
+
   return (
-    <div className='flex items-start'>
-      <div className='flex gap-[60px]  py-[48px] pl-[48px]  pr-[70px] bg-[#F9F9F9] w-1/2 mt-48px '>
+    <div className='flex items-start bg-[#F9F9F9]'>
+      <div className='flex gap-[60px]  py-[48px] pl-[48px]  pr-[70px]  w-1/2 mt-48px '>
         <div>
           <img
             onClick={() => {
@@ -298,7 +334,7 @@ export default function Experince() {
               <div className='flex flex-col gap-[5px]'>
                 <h3>Position</h3>
                 <input
-                  //   {...register("position2")}
+                  {...register("position2")}
                   type='text'
                   placeholder='developer'
                   className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
@@ -308,7 +344,7 @@ export default function Experince() {
               <div className='flex flex-col gap-[5px]'>
                 <h3>Company</h3>
                 <input
-                  //   {...register("employer2")}
+                  {...register("employer2")}
                   type='text'
                   placeholder='company'
                   className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
@@ -320,7 +356,6 @@ export default function Experince() {
                 <div className='flex flex-col relative gap-[5px] w-full'>
                   <h3>Birthdate</h3>
                   <input
-                    // {...register("position2")}
                     type='text'
                     placeholder='YYYY-MM-DD'
                     className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
@@ -334,6 +369,7 @@ export default function Experince() {
                     onClick={handleFirstCalendarClick}
                   />
                   <input
+                    {...register("startDate2")}
                     type='date'
                     ref={firstDateRef}
                     style={{ display: "none" }}
@@ -358,6 +394,7 @@ export default function Experince() {
                     onClick={handleSecondCalendarClick}
                   />
                   <input
+                    {...register("endDate2")}
                     type='date'
                     ref={secondDateRef}
                     style={{ display: "none" }}
@@ -380,6 +417,7 @@ export default function Experince() {
               <div className='flex flex-col gap-[5px] w-full'>
                 <p>Description</p>
                 <textarea
+                  {...register("description2")}
                   placeholder='Description'
                   className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] pt-[6px] pb-[40px] font-[16px] border rounded-[4px] w-full'
                 />
@@ -388,7 +426,7 @@ export default function Experince() {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                setShow(true), setPage(4);
+                setShow(!show), setPage(4);
               }}
               className='bg-[#62A1EB] py-[12px] mt-[45px]  text-[#FFF] text-[16px] w-[200px] rounded-[4px]'
             >
@@ -396,6 +434,7 @@ export default function Experince() {
             </button>
             <div className='flex justify-between mt-[100px]'>
               <button
+                type='submit'
                 onClick={() => navigate("/personal")}
                 className='rounded-[4px] bg-[#6B40E3] text-white py-[7px] w-[80px]'
               >
@@ -413,9 +452,12 @@ export default function Experince() {
       </div>
 
       {/* Summary Section */}
-      <div className='bg-white flex  gap-[220px] px-[50px] mt-[40px]'>
-        <div className='flex relative flex-col gap-[20px]'>
-          <div className='text-[34px] leading-normal flex gap-[10px]'>
+      {/* Summary Section */}
+      {/* Summary Section */}
+
+      <div className='bg-[#fff] flex  w-1/2 gap-[220px] px-[50px] pt-[40px]'>
+        <div className='flex relative flex-col  gap-[20px]'>
+          <div className='text-[34px] leading-normal flex gap-[10px] text-[#F93B1D]'>
             <span>{personalData?.name}</span>
             <span>{personalData?.lastname}</span>
           </div>
@@ -445,28 +487,46 @@ export default function Experince() {
               </span>
             </div>
           )}
-          <img
-            className='absolute top-[850px] w-[42px] h-[42px]'
-            src={starIMG}
-            alt='star image with red background'
-          />
+
           {""}
           {""}
           {""}
           {""}
-          <div className='flex relative flex-col mt-[40px] gap-[20px]'>
-            {(Wposition ||
-              Wemployer ||
-              Wstartdate ||
-              Wenddate ||
-              Wdescription) && (
-              <p className='text-[#F93B1D] text-[18px]'>Experince</p>
+          <div className='flex relative flex-col mt-[120px] w-[200px] '>
+            {inputCheck && (
+              <p className='text-[#F93B1D] mb-[10px] text-[30px]'>
+                Experince
+              </p>
             )}
+            <div className='flex h-[30px] gap-[5px] text-[#1A1A1A] font-medium text-[19px] break-words'>
+              <div>
+                {Wposition && (
+                  <p>
+                    {Wposition}
+                    {Wemployer && <span>,</span>}{" "}
+                  </p>
+                )}
+              </div>
+              <div className='h-[30px'>
+                {Wemployer && <p>{Wemployer}</p>}
+              </div>
+            </div>
+            <div className='flex gap-[5px] h-[30px] text-[16px]'>
+              <p className='text-[#909090]'>{Wstartdate}</p>
+              {Wenddate && <span className='text-[#909090]'>-</span>}
+              <p className='text-[#909090]'>{Wenddate}</p>
+            </div>
+            <p className='text-[#000] break-words'>{Wdescription}</p>
           </div>
           {""}
           {""}
           {""}
           {""}
+          <img
+            className=' mt-[350px] mb-[44px]  w-[42px] h-[42px]'
+            src={starIMG}
+            alt='star image with red background'
+          />
         </div>
 
         <div>
@@ -477,7 +537,7 @@ export default function Experince() {
             />
           )}
         </div>
-        <hr className='bg-[#1A1A1A]  h-[2px] absolute w-[620px] top-[270px]' />
+        <hr className='bg-[#1A1A1A]  h-[2px] absolute w-[620px] top-[320px]' />
       </div>
     </div>
   );

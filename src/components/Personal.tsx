@@ -70,7 +70,7 @@ export default function Personal() {
       setValue("email", parsedData.email || "");
       setValue("number", parsedData.number || "");
       setValue("optional", parsedData.optional || "");
-      trigger();
+    //   trigger();
       // Add any other fields you want to pre-fill here
     }
   }, [setValue, trigger]);
