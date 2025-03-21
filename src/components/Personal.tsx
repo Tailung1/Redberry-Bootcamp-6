@@ -414,8 +414,8 @@ export default function Personal() {
       </div>
 
       {/* Summary Section */}
-      <div className='bg-white '>
-        <div className='flex items-center mt-[68px] ml-[50px]'>
+
+        <div className='flex items-center bg-white mt-[68px] ml-[50px]'>
           <div className='flex relative flex-col gap-[20px]'>
             <div className='text-[34px] leading-normal flex gap-[10px] className="h-[40px] text-[#F93B1D]'>
               <span>{name}</span>
@@ -461,7 +461,7 @@ export default function Personal() {
             )}
           </div>
         </div>
-      </div>
+
     </div>
   );
 }

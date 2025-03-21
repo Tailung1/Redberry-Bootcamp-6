@@ -56,6 +56,7 @@ export default function Experince() {
     employer: string;
     startDate: string;
     endDate: string;
+    description: string;
   };
 
   const {
@@ -74,14 +75,17 @@ export default function Experince() {
   const Wemployer = watch("employer");
   const Wstartdate = watch("startDate");
   const Wenddate = watch("endDate");
+  const Wdescription = watch("description");
 
   return (
     <div className='flex items-start'>
-      <div className='flex gap-[60px]  py-[48px] pl-[48px] pr-[70px] bg-[#F9F9F9] mt-48px '>
+      <div className='flex gap-[60px]  py-[48px] pl-[48px]  pr-[70px] bg-[#F9F9F9] w-1/2 mt-48px '>
         <div>
           <img
             onClick={() => {
-              navigate("/personal");
+              navigate("/");
+              localStorage.removeItem("formData");
+              localStorage.removeItem("image");
             }}
             className='cursor-pointer'
             src={arrowIMG}
@@ -103,7 +107,7 @@ export default function Experince() {
             {/* position */}
             {/* position */}
             {/* position */}
-            <div className='flex flex-col gap-[5px] relative'>
+            <div className='flex flex-col w-full gap-[5px] relative'>
               <h3>Position</h3>
               <input
                 {...register("position", {
@@ -267,8 +271,17 @@ export default function Experince() {
             <div className='flex flex-col gap-[5px] w-full'>
               <p>Description</p>
               <textarea
+                {...register("description", {
+                  required: "Cant be Empty",
+                })}
                 placeholder='Description'
-                className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] pt-[6px] pb-[40px] font-[16px] border rounded-[4px] w-full'
+                className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] pt-[6px] pb-[40px] font-[16px] border rounded-[4px] w-full ${
+                  errors.description && !Wdescription
+                    ? "border-[#EF5050]"
+                    : Wdescription
+                    ? "border-[#98E37E]"
+                    : "border-gray-300"
+                }`}
               />
             </div>
             <hr className='h-[1.5px] bg-[#C1C1C1] mt-[50px]' />
@@ -285,6 +298,7 @@ export default function Experince() {
               <div className='flex flex-col gap-[5px]'>
                 <h3>Position</h3>
                 <input
+                  //   {...register("position2")}
                   type='text'
                   placeholder='developer'
                   className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
@@ -294,6 +308,7 @@ export default function Experince() {
               <div className='flex flex-col gap-[5px]'>
                 <h3>Company</h3>
                 <input
+                  //   {...register("employer2")}
                   type='text'
                   placeholder='company'
                   className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
@@ -305,6 +320,7 @@ export default function Experince() {
                 <div className='flex flex-col relative gap-[5px] w-full'>
                   <h3>Birthdate</h3>
                   <input
+                    // {...register("position2")}
                     type='text'
                     placeholder='YYYY-MM-DD'
                     className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
@@ -370,7 +386,8 @@ export default function Experince() {
               </div>
             </div>
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setShow(true), setPage(4);
               }}
               className='bg-[#62A1EB] py-[12px] mt-[45px]  text-[#FFF] text-[16px] w-[200px] rounded-[4px]'
@@ -378,7 +395,10 @@ export default function Experince() {
               Add more experince
             </button>
             <div className='flex justify-between mt-[100px]'>
-              <button className='rounded-[4px] bg-[#6B40E3] text-white py-[7px] w-[80px]'>
+              <button
+                onClick={() => navigate("/personal")}
+                className='rounded-[4px] bg-[#6B40E3] text-white py-[7px] w-[80px]'
+              >
                 back
               </button>
               <button
@@ -393,13 +413,13 @@ export default function Experince() {
       </div>
 
       {/* Summary Section */}
-      <div className='bg-white flex   gap-[220px] ml-[50px] mt-[50px]  '>
+      <div className='bg-white flex  gap-[220px] px-[50px] mt-[40px]'>
         <div className='flex relative flex-col gap-[20px]'>
           <div className='text-[34px] leading-normal flex gap-[10px]'>
             <span>{personalData?.name}</span>
             <span>{personalData?.lastname}</span>
           </div>
-          <div className='h-[40px]'>
+          <div className='h-[15px]'>
             {personalData?.email && (
               <div className='flex gap-[10px]'>
                 <img src={atIMG} alt='at image' />{" "}
@@ -407,7 +427,7 @@ export default function Experince() {
               </div>
             )}
           </div>
-          <div className='h-[40px]'>
+          <div className='h-[20px]'>
             {personalData?.number && (
               <div className='flex gap-[10px]'>
                 <img src={phoneIMG} alt='phone image' />{" "}
@@ -426,10 +446,27 @@ export default function Experince() {
             </div>
           )}
           <img
-            className='mt-[670px] w-[42px] h-[42px]'
+            className='absolute top-[850px] w-[42px] h-[42px]'
             src={starIMG}
             alt='star image with red background'
           />
+          {""}
+          {""}
+          {""}
+          {""}
+          <div className='flex relative flex-col mt-[40px] gap-[20px]'>
+            {(Wposition ||
+              Wemployer ||
+              Wstartdate ||
+              Wenddate ||
+              Wdescription) && (
+              <p className='text-[#F93B1D] text-[18px]'>Experince</p>
+            )}
+          </div>
+          {""}
+          {""}
+          {""}
+          {""}
         </div>
 
         <div>
@@ -440,6 +477,7 @@ export default function Experince() {
             />
           )}
         </div>
+        <hr className='bg-[#1A1A1A]  h-[2px] absolute w-[620px] top-[270px]' />
       </div>
     </div>
   );
