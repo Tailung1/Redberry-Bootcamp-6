@@ -10,7 +10,6 @@ import warning from "../assets/warning.svg";
 
 import { useForm } from "react-hook-form";
 
-
 export default function Experince() {
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(false);
@@ -99,18 +98,16 @@ export default function Experince() {
     const storagedFirstDate = localStorage.getItem(
       "startDateStorage"
     );
-    if(storagedFirstDate) {
-        const parsedStoragedFirstDate = JSON.parse(
-          storagedFirstDate
-        );
-        setFirstDate(parsedStoragedFirstDate);
+    if (storagedFirstDate) {
+      const parsedStoragedFirstDate = JSON.parse(storagedFirstDate);
+      setFirstDate(parsedStoragedFirstDate);
     }
-     const storagedSecondDate =
-       localStorage.getItem("endtDateStorage");
-     if (storagedSecondDate) {
-       const parsedStoragedFirstDate = JSON.parse(storagedSecondDate);
-       setSecondDate(parsedStoragedFirstDate);
-     }
+    const storagedSecondDate =
+      localStorage.getItem("endtDateStorage");
+    if (storagedSecondDate) {
+      const parsedStoragedFirstDate = JSON.parse(storagedSecondDate);
+      setSecondDate(parsedStoragedFirstDate);
+    }
   }, []);
 
   const inputCheck =
@@ -122,28 +119,44 @@ export default function Experince() {
     Wenddate2 ||
     Wdescriptio2;
 
-  const handleSaveInfo = (info: object | string) => {
-    if (typeof info !== "object") return;
+  const handleSaveInfo = (info: object) => {
+    // if (typeof info !== "object") return;
     localStorage.setItem("formDataExperince", JSON.stringify(info));
-     localStorage.setItem(
-       "startDateStorage",
-       JSON.stringify(firstDate)
-     );
-     localStorage.setItem(
-       "endtDateStorage",
-       JSON.stringify(secondDate)
-     );
+    localStorage.setItem(
+      "startDateStorage",
+      JSON.stringify(firstDate)
+    );
+    localStorage.setItem(
+      "endtDateStorage",
+      JSON.stringify(secondDate)
+    );
+  };
+  const handleBackClick = () => {
+    // Save the form data on clicking "Back"
+    const formData = {
+      position: Wposition,
+      employer: Wemployer,
+      startDate: Wstartdate,
+      endDate: Wenddate,
+      description: Wdescription,
+    };
+
+    handleSaveInfo(formData);
+    navigate("/personal");
   };
 
   const onSubmit = (data: object) => {
     handleSaveInfo(data);
     if (show && !inputCheck2) return;
     localStorage.setItem("formDataExperince", JSON.stringify(data));
-     localStorage.setItem("startDateStorage", JSON.stringify(firstDate));
-     localStorage.setItem(
-       "endtDateStorage",
-       JSON.stringify(secondDate)
-     );
+    localStorage.setItem(
+      "startDateStorage",
+      JSON.stringify(firstDate)
+    );
+    localStorage.setItem(
+      "endtDateStorage",
+      JSON.stringify(secondDate)
+    );
     navigate("/personal/experince/education");
   };
 
@@ -156,7 +169,11 @@ export default function Experince() {
               navigate("/");
               localStorage.removeItem("formData");
               localStorage.removeItem("image");
-              localStorage.removeItem("storageExperince");
+              localStorage.removeItem("formDataExperince");
+              localStorage.removeItem("startDateStorage");
+              localStorage.removeItem("endtDateStorage");
+              setFirstDate("");
+              setSecondDate("");
             }}
             className='cursor-pointer'
             src={arrowIMG}
@@ -471,7 +488,7 @@ export default function Experince() {
                 type='button'
                 onClick={() => {
                   navigate("/personal");
-                  handleSaveInfo("heh");
+                  handleBackClick();
                 }}
                 className='rounded-[4px] bg-[#6B40E3] text-white py-[7px] w-[80px]'
               >

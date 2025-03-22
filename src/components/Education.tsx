@@ -8,13 +8,43 @@ import phoneIMG from "../assets/phone.svg";
 import check from "../assets/check.svg";
 import warning from "../assets/warning.svg";
 import { useForm } from "react-hook-form";
+import { jsx } from "react/jsx-runtime";
+
 export default function Education() {
+  const navigate = useNavigate();
+
   const [endDate, setEndDate] = useState("");
+
+  useEffect(() => {
+    const storagedEducation = localStorage.getItem(
+      "formDataEducation"
+    );
+    if (storagedEducation) {
+      const parsedEducation = JSON.parse(storagedEducation);
+      setValue("uni", parsedEducation.uni);
+      setValue("endDate", parsedEducation.endDate);
+      setValue("degree", parsedEducation.degree);
+      setValue("description", parsedEducation.description);
+    }
+
+    const storagedFirstDate = localStorage.getItem(
+      "startDateStorage"
+    );
+    if (storagedFirstDate) {
+      const parsedStoragedFirstDate = JSON.parse(storagedFirstDate);
+      setEndDate(parsedStoragedFirstDate);
+    }
+  }, []);
+
   const endDateRef = useRef<HTMLInputElement>(null);
 
   const handleDateClick = () => endDateRef.current?.showPicker();
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleDateChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setValue("endDate", e.target.value);
+    setEndDate(e.target.value);
+  };
 
   type inputTypes = {
     uni: string;
@@ -36,13 +66,29 @@ export default function Education() {
   const Wdegree = watch("degree");
   const Wuni = watch("uni");
 
-   const storedData = localStorage.getItem("formData");
-   const personalData = storedData ? JSON.parse(storedData) : {};
+  const storedData = localStorage.getItem("formData");
+  const pdp = storedData ? JSON.parse(storedData) : {};
 
-   
+  const storedDataExperince = localStorage.getItem(
+    "formDataExperince"
+  );
+  const pde = storedDataExperince
+    ? JSON.parse(storedDataExperince)
+    : {};
 
+  const handleSaveInfo = (info: object | string) => {
+    if (typeof info !== "object") return;
+    localStorage.setItem("formDataExperince", JSON.stringify(info));
+    localStorage.setItem(
+      "endDateStorage",
+      JSON.stringify(setEndDate)
+    );
+  };
 
-  const onSubmit = () => {};
+  const onSubmit = (data: object) => {
+    handleSaveInfo(data);
+    localStorage.setItem("formDataEducation", JSON.stringify(data));
+  };
 
   return (
     <div>
@@ -119,7 +165,7 @@ export default function Education() {
                       : "border-gray-300"
                   }`}
                   type='text'
-                  value={WendDate}
+                  value={endDate}
                   placeholder='mm / dd / yyyy'
                   readOnly
                 />
@@ -155,7 +201,7 @@ export default function Education() {
                 }`}
                 type='text'
               />
-              {errors.description? (
+              {errors.description ? (
                 <img
                   className=' w-6 h-6 absolute top-[50%] right-[-30px]'
                   src={warning}
@@ -187,7 +233,13 @@ export default function Education() {
               Add other School/University
             </button>
             <div className='flex justify-between mt-[100px]'>
-              <button className='bg-[#6B40E3] rounded-[4px] text-white py-[10px] w-[100px]'>
+              <button
+                onClick={() => {
+                  handleSaveInfo("ff");
+                  navigate("/personal/experince");
+                }}
+                className='bg-[#6B40E3] rounded-[4px] text-white py-[10px] w-[100px]'
+              >
                 Back
               </button>
               <button
