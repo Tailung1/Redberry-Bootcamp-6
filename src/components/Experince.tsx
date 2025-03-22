@@ -10,6 +10,7 @@ import warning from "../assets/warning.svg";
 
 import { useForm } from "react-hook-form";
 
+
 export default function Experince() {
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(false);
@@ -71,12 +72,6 @@ export default function Experince() {
     formState: { errors },
   } = useForm<inputTypes>();
 
-  const onSubmit = (data: object) => {
-    if (show && !inputCheck2) return;
-    localStorage.setItem("storageExperince", JSON.stringify(data));
-    navigate("/personal/experince/education");
-  };
-
   const Wposition = watch("position");
   const Wemployer = watch("employer");
   const Wstartdate = watch("startDate");
@@ -91,7 +86,7 @@ export default function Experince() {
 
   useEffect(() => {
     const storagedExperince = localStorage.getItem(
-      "storageExperince"
+      "formDataExperince"
     );
     if (storagedExperince) {
       const parsedExperince = JSON.parse(storagedExperince);
@@ -101,6 +96,21 @@ export default function Experince() {
       setValue("endDate", parsedExperince.endDate);
       setValue("description", parsedExperince.description);
     }
+    const storagedFirstDate = localStorage.getItem(
+      "startDateStorage"
+    );
+    if(storagedFirstDate) {
+        const parsedStoragedFirstDate = JSON.parse(
+          storagedFirstDate
+        );
+        setFirstDate(parsedStoragedFirstDate);
+    }
+     const storagedSecondDate =
+       localStorage.getItem("endtDateStorage");
+     if (storagedSecondDate) {
+       const parsedStoragedFirstDate = JSON.parse(storagedSecondDate);
+       setSecondDate(parsedStoragedFirstDate);
+     }
   }, []);
 
   const inputCheck =
@@ -111,6 +121,31 @@ export default function Experince() {
     Wstartdate2 ||
     Wenddate2 ||
     Wdescriptio2;
+
+  const handleSaveInfo = (info: object | string) => {
+    if (typeof info !== "object") return;
+    localStorage.setItem("formDataExperince", JSON.stringify(info));
+     localStorage.setItem(
+       "startDateStorage",
+       JSON.stringify(firstDate)
+     );
+     localStorage.setItem(
+       "endtDateStorage",
+       JSON.stringify(secondDate)
+     );
+  };
+
+  const onSubmit = (data: object) => {
+    handleSaveInfo(data);
+    if (show && !inputCheck2) return;
+    localStorage.setItem("formDataExperince", JSON.stringify(data));
+     localStorage.setItem("startDateStorage", JSON.stringify(firstDate));
+     localStorage.setItem(
+       "endtDateStorage",
+       JSON.stringify(secondDate)
+     );
+    navigate("/personal/experince/education");
+  };
 
   return (
     <div className='flex items-start bg-[#F9F9F9]'>
@@ -358,7 +393,6 @@ export default function Experince() {
                     type='text'
                     placeholder='YYYY-MM-DD'
                     className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
-                    value={firstDate}
                     readOnly
                   />
                   <img
@@ -383,7 +417,6 @@ export default function Experince() {
                     type='text'
                     placeholder='YYYY-MM-DD'
                     className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
-                    value={secondDate}
                     readOnly
                   />
                   <img
@@ -433,13 +466,20 @@ export default function Experince() {
             </button>
             <div className='flex justify-between mt-[100px]'>
               <button
-                type='submit'
-                onClick={() => navigate("/personal")}
+                name='action'
+                value={"back"}
+                type='button'
+                onClick={() => {
+                  navigate("/personal");
+                  handleSaveInfo("heh");
+                }}
                 className='rounded-[4px] bg-[#6B40E3] text-white py-[7px] w-[80px]'
               >
                 back
               </button>
               <button
+                name='action'
+                value={"forward"}
                 type='submit'
                 className='bg-[#6B40E3] rounded-[4px] text-white py-[10px] w-[100px]'
               >
