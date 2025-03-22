@@ -122,6 +122,7 @@ export default function Experince() {
               navigate("/");
               localStorage.removeItem("formData");
               localStorage.removeItem("image");
+              localStorage.removeItem("storageExperince");
             }}
             className='cursor-pointer'
             src={arrowIMG}
@@ -537,7 +538,7 @@ export default function Experince() {
             />
           )}
         </div>
-        <hr className='bg-[#1A1A1A]  h-[2px] absolute w-[620px] top-[320px]' />
+        <hr className='bg-[#1A1A1A]  h-[2px] absolute w-[620px] top-[300px]' />
       </div>
     </div>
   );
