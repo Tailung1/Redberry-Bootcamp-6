@@ -27,17 +27,16 @@ export default function Experince() {
   const handleFirstCalendarClick = () => {
     firstDateRef.current?.showPicker();
   };
-
-  const handleSecondCalendarClick = () => {
-    secondDateRef.current?.showPicker?.();
-    secondDateRef.current?.click();
-  };
-
   const handleFirstDateChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFirstDate(e.target.value);
     setValue("startDate", e.target.value);
+  };
+
+  const handleSecondCalendarClick = () => {
+    secondDateRef.current?.showPicker?.();
+    secondDateRef.current?.click();
   };
 
   const handleSecondDateChange = (
@@ -253,7 +252,6 @@ export default function Experince() {
                   type='date'
                   ref={firstDateRef}
                   className='hidden'
-                  value={firstDate}
                   onChange={handleFirstDateChange}
                 />
               </div>
