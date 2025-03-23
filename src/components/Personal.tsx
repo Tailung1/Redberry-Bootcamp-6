@@ -415,53 +415,54 @@ export default function Personal() {
 
       {/* Summary Section */}
 
-        <div className='flex items-center bg-white mt-[68px] ml-[50px]'>
-          <div className='flex relative flex-col gap-[20px]'>
-            <div className='text-[34px] leading-normal flex gap-[10px] className="h-[40px] text-[#F93B1D]'>
-              <span>{name}</span>
-              <span>{lastName}</span>
-            </div>
-            <div className='h-[40px]'>
-              {email && (
-                <div className='flex gap-[10px]'>
-                  <img src={atIMG} alt='at image' /> {email}{" "}
-                </div>
-              )}
-            </div>
-            <div className='h-[40px]'>
-              {number && (
-                <div className='flex gap-[10px]'>
-                  <img src={phoneIMG} alt='at image' /> {number}{" "}
-                </div>
-              )}
-            </div>
-            {optional && (
-              <div className='h-[40px]'>
-                <p className='mb-[10px] text-[#F93B1D] text-[18px] '>
-                  About me
-                </p>
-                <span className='block max-w-[300px] break-words'>
-                  {optional}
-                </span>
-              </div>
-            )}
-            <img
-              className='mt-[670px] w-[42px] h-[42px]'
-              src={starIMG}
-              alt='star image with red background'
-            />
+      <div className='flex gap-[50px] px-[50px] pt-[50px] '>
+        {/* Left text block */}
+        <div className='flex flex-col gap-[20px] w-[400px]'>
+          <div className='text-[34px] leading-normal flex gap-[10px] h-[40px] text-[#F93B1D]'>
+            <span>{name}</span>
+            <span>{lastName}</span>
           </div>
           <div className='h-[40px]'>
-            {image && (
-              <img
-                src={image}
-                alt='Uploaded'
-                className='absolute right-10 top-20 w-[200px] h-[200px] object-cover rounded-full'
-              />
+            {email && (
+              <div className='flex gap-[10px]'>
+                <img src={atIMG} alt='at image' /> {email}
+              </div>
             )}
           </div>
+          <div className='h-[40px]'>
+            {number && (
+              <div className='flex gap-[10px]'>
+                <img src={phoneIMG} alt='phone image' /> {number}
+              </div>
+            )}
+          </div>
+          {optional && (
+            <div>
+              <p className='mb-[10px] text-[#F93B1D] text-[18px]'>
+                About me
+              </p>
+              <span className='block max-w-[300px] break-words'>
+                {optional}
+              </span>
+            </div>
+          )}
         </div>
 
+        {/* Image stays fixed */}
+        <div>
+          {image && (
+            <img
+              src={image}
+              alt='Uploaded'
+              className='w-[200px] h-[200px] object-cover rounded-full'
+            />
+          )}
+        </div>
+        <img
+          className='absolute bottom-[-200px] w-10 h-10'
+          src={starIMG}
+        />
+      </div>
     </div>
   );
 }

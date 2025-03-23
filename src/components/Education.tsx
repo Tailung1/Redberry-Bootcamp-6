@@ -10,6 +10,7 @@ import warning from "../assets/warning.svg";
 import { useForm } from "react-hook-form";
 
 export default function Education() {
+  const storedImage = localStorage.getItem("image");
   const navigate = useNavigate();
   const [endDate, setEndDate] = useState("");
   const [degree, setDegree] = useState(""); // State to store the selected degree
@@ -115,6 +116,12 @@ export default function Education() {
     | "Master's degree"
     | "Doctoral degree";
 
+    const inputCheck =
+      Wuni ||
+      WendDate||
+      Wdesciption||
+      WdegreeRegist;
+
   const handleDegreeClick = (selectedDegree: DegreeOption) => {
     setDegree(selectedDegree); // Set the selected degree
     setDegreeDropdownOpen(false); // Close the dropdown
@@ -128,7 +135,7 @@ export default function Education() {
     }, 300); // Adjust this delay as necessary
   };
   return (
-    <div>
+    <div className='flex'>
       <div className='bg-[#F9F9F9] flex gap-[20px] w-1/2 py-[20px] px-[50px]'>
         <div>
           <img
@@ -152,13 +159,16 @@ export default function Education() {
               <input
                 {...register("uni", {
                   required: "required",
-                  min: 2,
+                  minLength: {
+                    value: 2,
+                    message: "min.2",
+                  },
                 })}
                 type='text'
                 className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]  ${
                   errors.uni
                     ? "border-[#EF5050]"
-                    : !errors.uni && Wuni
+                    : !errors.uni && Wuni?.length > 1
                     ? "border-[#98E37E]"
                     : "border-gray-300"
                 }`}
@@ -169,7 +179,7 @@ export default function Education() {
                   className=' w-6 h-6 absolute top-[35%] right-[-30px]'
                   src={warning}
                 />
-              ) : !errors.uni && Wuni ? (
+              ) : !errors.uni && Wuni?.length > 1 ? (
                 <img
                   className='absolute top-[37%] w-6 h-6 right-[10px] '
                   src={check}
@@ -361,7 +371,80 @@ export default function Education() {
         </div>
       </div>
 
-      <div></div>
+      <div className='bg-[#FFF] relative flex flex-col px-[40px] pt-[40px] w-1/2'>
+        <div className='flex justify-between'>
+          <div className='flex flex-col gap-[15px]'>
+            {" "}
+            <div className='flex gap-[10px] text-red-500 text-[30px]'>
+              <h2>{fdp?.name}</h2>
+              <h2>{fdp?.lastname}</h2>
+            </div>
+            <div className='flex flex-col gap-[5px]'>
+              <div className='flex gap-[10px]'>
+                <img src={atIMG} alt='' />
+                <p>{fdp.email}</p>
+              </div>
+              <div className='flex gap-[10px]'>
+                <img src={phoneIMG} alt='' />
+                <p>{fdp.number}</p>
+              </div>
+            </div>
+            {fdp.optional && (
+              <div>
+                {" "}
+                <h3 className='text-red-600 text-[20px]'>
+                  About me
+                </h3>{" "}
+                <p>{fdp.optional}</p>{" "}
+              </div>
+            )}
+          </div>
+          <div>
+            {storedImage ? (
+              <img
+                className='w-[200px] h-[200px]'
+                src={storedImage}
+              />
+            ) : (
+              <p>Image dont found</p>
+            )}
+          </div>
+        </div>
+        <hr className='my-[15px] ' />
+        <div className='flex flex-col gap-[15px]'>
+          <h2 className='text-red-500 text-[30px]'>Experince</h2>
+          <div className='flex flex-col '>
+            <div className='flex gap-[5px] text-[1A1A1A]'>
+              <p>{fde.position},</p>
+              <p>{fde.employer}</p>
+            </div>
+            <div className='flex gap-[5px] text-[#909090]'>
+              <p>{fde.startDate}</p>
+              <span>-</span>
+              <p>{fde.endDate}</p>
+            </div>
+          </div>
+          <p>{fde.description}</p>
+        </div>
+        <hr className='my-[15px]' />
+        <div className='flex flex-col gap-[15px]'>
+          {inputCheck && (
+            <h2  className='text-red-500  text-[20px]'>Education</h2>
+          )}
+          <div className='h-[40px]'>
+            <div className='flex gap-[10px]'>
+              <p className='text-[#1A1A1A]'>
+                {Wuni}
+                {Wuni &&","}
+              </p>
+              <p className='text-[#1A1A1A]'>{WdegreeRegist}</p>
+            </div>
+            <span className='text-[#909090]'>{WendDate}</span>
+          </div>
+          <p className='h-[40px]'>{Wdesciption}</p>
+        </div>
+        <img className="absolute bottom-[20px] w-10 h-10" src={starIMG} />
+      </div>
     </div>
   );
 }

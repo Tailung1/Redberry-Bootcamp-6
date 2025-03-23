@@ -559,7 +559,7 @@ export default function Experince() {
                   </p>
                 )}
               </div>
-              <div className='h-[30px'>
+              <div className='h-[10px'>
                 {Wemployer && <p>{Wemployer}</p>}
               </div>
             </div>
@@ -568,7 +568,7 @@ export default function Experince() {
               {Wenddate && <span className='text-[#909090]'>-</span>}
               <p className='text-[#909090]'>{Wenddate}</p>
             </div>
-            <p className='text-[#000] break-words'>{Wdescription}</p>
+            <p  className='text-[#000] h-[30px] break-words'>{Wdescription}</p>
           </div>
           {""}
           {""}
