@@ -101,6 +101,7 @@ export default function Education() {
 
   const onSubmit = (data: object) => {
     localStorage.setItem("formDataEducation", JSON.stringify(data));
+    navigate("/personal/experince/education/cv")
   };
 
   // Handle dropdown toggle and arrow rotation
