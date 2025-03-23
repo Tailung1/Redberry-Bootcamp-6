@@ -134,6 +134,8 @@ export default function Education() {
       setArrowRotation(180); // Reset the arrow to point up
     }, 300); // Adjust this delay as necessary
   };
+
+  const [show,setShow]=useState<boolean>(false)
   return (
     <div className='flex'>
       <div className='bg-[#F9F9F9] flex gap-[20px] w-1/2 py-[20px] px-[50px]'>
@@ -145,7 +147,7 @@ export default function Education() {
             }}
             src={arrowIMG}
             alt='arrow icon'
-            className="cursor-pointer"
+            className='cursor-pointer'
           />
         </div>
         <div className='w-full flex flex-col gap-[7px]'>
@@ -351,9 +353,20 @@ export default function Education() {
             </div>
 
             <hr className='bg-[#C1C1C1] h-[1.4px]' />
-            <button className=' w-[280px] rounded-[4px] bg-[#62A1EB] text-[#fff] py-[15px]'>
-              Add other School/University
-            </button>
+            <div className='relative'>
+              {show && (
+                <p className='absolute top-[-30px] text-red-800'>
+                  I was too tired to do this again :(
+                </p>
+              )}
+              <button
+              type="button"
+                onClick={() => {setShow(true),setTimeout(()=>setShow(false),3000)}}
+                className=' w-[280px] rounded-[4px] bg-[#62A1EB] text-[#fff] py-[15px]'
+              >
+                Add other School/University
+              </button>
+            </div>
             <div className='flex justify-between mt-[100px]'>
               <button
                 onClick={() => {
@@ -410,7 +423,7 @@ export default function Education() {
                 src={storedImage}
               />
             ) : (
-              <p>Image dont found</p>
+              ""
             )}
           </div>
         </div>
@@ -439,7 +452,7 @@ export default function Education() {
             <div className='flex gap-[10px]'>
               <p className='text-[#1A1A1A]'>
                 {Wuni}
-                {Wuni && ","}
+                {Wuni && WdegreeRegist && ","}
               </p>
               <p className='text-[#1A1A1A]'>{WdegreeRegist}</p>
             </div>
