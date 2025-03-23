@@ -24,22 +24,21 @@ export default function Education() {
       const parsedEducation = JSON.parse(storagedEducation);
       setValue("uni", parsedEducation.uni);
       setValue("endDate", parsedEducation.endDate);
-      setValue("degreeRegist", parsedEducation.degree);
+      setValue("degreeRegist", parsedEducation.degreeRegist);
       setValue("description", parsedEducation.description);
     }
 
-    const storagedFirstDate = localStorage.getItem(
-      "startDateStorage"
+    const storagedEndData= localStorage.getItem(
+      "endDateStorage2"
     );
-    if (storagedFirstDate) {
-      const parsedStoragedFirstDate = JSON.parse(storagedFirstDate);
-      setEndDate(parsedStoragedFirstDate);
+    if (storagedEndData) {
+      const parsedEndData = JSON.parse(storagedEndData);
+      setEndDate(parsedEndData);
     }
 
-    const storagedDegree = localStorage.getItem("degree");
+    const storagedDegree = localStorage.getItem("degreeStorage");
     if (storagedDegree) {
       const parsedDegree = JSON.parse(storagedDegree);
-      setValue("degreeRegist", parsedDegree);
       setDegree(parsedDegree);
     }
   }, []);
@@ -87,7 +86,7 @@ export default function Education() {
 
   const handleSaveInfo = (info: object) => {
     localStorage.setItem("formDataEducation", JSON.stringify(info));
-    localStorage.setItem("endDateStorage", JSON.stringify(endDate));
+    localStorage.setItem("endDateStorage2", JSON.stringify(endDate));
     localStorage.setItem("degreeStorage", JSON.stringify(degree));
   };
 
