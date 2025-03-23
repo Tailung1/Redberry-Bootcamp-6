@@ -1,13 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import calendar from "../assets/calendar.svg";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import arrowIMG from "../assets/arrow.svg";
 import starIMG from "../assets/star.png";
 import atIMG from "../assets/at.svg";
 import phoneIMG from "../assets/phone.svg";
-import check from "../assets/check.svg";
-import warning from "../assets/warning.svg";
-import { useForm } from "react-hook-form";
 
 export default function Cv() {
   const navigate = useNavigate();
@@ -27,18 +24,17 @@ export default function Cv() {
   const fded = storedEducation ? JSON.parse(storedEducation) : {};
 
   const storedImage = localStorage.getItem("image");
-  const [show,setShow]=useState<boolean>(true)
+  const [show, setShow] = useState<boolean>(true);
   return (
     <div className='flex items-start ml-[40px] mt-[54px]  mb-[129px]'>
       <img
-      className="cursor-pointer"
+        className='cursor-pointer'
         onClick={() => {
           localStorage.clear();
           navigate("/");
         }}
         src={arrowIMG}
         alt='arrow icon'
-        
       />
       <div className='flex flex-col gap-[25px] border-[0.8px] ml-[24%]  px-[55px] pb-[40px] pt-[40px] border-[#000]'>
         <div className='flex items-center gap-[85px]'>
@@ -127,7 +123,11 @@ export default function Cv() {
         />
       </div>
       {show && (
-        <div className={`bg-[#38cdeb] ${!show?"hidden":""} break-words w-[350px] relative pl-[30px] pr-[30px] py-[30px] leading-[43px] text-[28px] ml-[30px] shadow-[0_0_15px_5px_rgba(0,0,0,0.3)]`}>
+        <div
+          className={`bg-[#38cdeb] ${
+            !show ? "hidden" : ""
+          } break-words w-[350px] relative pl-[30px] pr-[30px] py-[30px] leading-[43px] text-[28px] ml-[30px] shadow-[0_0_15px_5px_rgba(0,0,0,0.3)]`}
+        >
           <p>CV successfully sent 🎉</p>
           <span
             onClick={() => setShow(false)}
