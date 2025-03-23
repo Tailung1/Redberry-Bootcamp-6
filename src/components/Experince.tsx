@@ -167,13 +167,7 @@ export default function Experince() {
           <img
             onClick={() => {
               navigate("/");
-              localStorage.removeItem("formData");
-              localStorage.removeItem("image");
-              localStorage.removeItem("formDataExperince");
-              localStorage.removeItem("startDateStorage");
-              localStorage.removeItem("endtDateStorage");
-              setFirstDate("");
-              setSecondDate("");
+             localStorage.clear()
             }}
             className='cursor-pointer'
             src={arrowIMG}
