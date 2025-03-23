@@ -27,17 +27,20 @@ export default function Cv() {
   const fded = storedEducation ? JSON.parse(storedEducation) : {};
 
   const storedImage = localStorage.getItem("image");
+  const [show,setShow]=useState<boolean>(true)
   return (
-    <div className='flex items-start ml-[20px] mt-[54px] mb-[129px]'>
+    <div className='flex items-start ml-[40px] mt-[54px]  mb-[129px]'>
       <img
+      className="cursor-pointer"
         onClick={() => {
           localStorage.clear();
           navigate("/");
         }}
         src={arrowIMG}
         alt='arrow icon'
+        
       />
-      <div className='flex flex-col gap-[25px] border-[0.8px] ml-[27%]  px-[55px] pb-[40px] pt-[40px] border-[#000]'>
+      <div className='flex flex-col gap-[25px] border-[0.8px] ml-[24%]  px-[55px] pb-[40px] pt-[40px] border-[#000]'>
         <div className='flex items-center gap-[85px]'>
           <div className='flex flex-col gap-[15px]'>
             {" "}
@@ -123,6 +126,17 @@ export default function Cv() {
           alt='star icon'
         />
       </div>
+      {show && (
+        <div className={`bg-[#38cdeb] ${!show?"hidden":""} break-words w-[350px] relative pl-[30px] pr-[30px] py-[30px] leading-[43px] text-[28px] ml-[30px] shadow-[0_0_15px_5px_rgba(0,0,0,0.3)]`}>
+          <p>CV successfully sent 🎉</p>
+          <span
+            onClick={() => setShow(false)}
+            className='absolute top-0 cursor-pointer text-red-600 right-[10px]'
+          >
+            x
+          </span>
+        </div>
+      )}
     </div>
   );
 }
