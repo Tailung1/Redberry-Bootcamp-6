@@ -87,6 +87,12 @@ export default function Experince() {
     const storagedExperince = localStorage.getItem(
       "formDataExperince"
     );
+    const storagedFirstDate = localStorage.getItem(
+      "startDateStorage"
+    );
+    const storagedSecondDate =
+      localStorage.getItem("endtDateStorage");
+
     if (storagedExperince) {
       const parsedExperince = JSON.parse(storagedExperince);
       setValue("position", parsedExperince.position);
@@ -95,18 +101,15 @@ export default function Experince() {
       setValue("endDate", parsedExperince.endDate);
       setValue("description", parsedExperince.description);
     }
-    const storagedFirstDate = localStorage.getItem(
-      "startDateStorage"
-    );
+
     if (storagedFirstDate) {
       const parsedStoragedFirstDate = JSON.parse(storagedFirstDate);
-      setFirstDate(parsedStoragedFirstDate);
+      setFirstDate(parsedStoragedFirstDate || "");
     }
-    const storagedSecondDate =
-      localStorage.getItem("endtDateStorage");
+
     if (storagedSecondDate) {
-      const parsedStoragedFirstDate = JSON.parse(storagedSecondDate);
-      setSecondDate(parsedStoragedFirstDate);
+      const parsedStoragedSecondDate = JSON.parse(storagedSecondDate);
+      setSecondDate(parsedStoragedSecondDate || "");
     }
   }, []);
 
@@ -146,7 +149,6 @@ export default function Experince() {
   };
 
   const onSubmit = (data: object) => {
-    handleSaveInfo(data);
     if (show && !inputCheck2) return;
     localStorage.setItem("formDataExperince", JSON.stringify(data));
     localStorage.setItem(
@@ -167,7 +169,7 @@ export default function Experince() {
           <img
             onClick={() => {
               navigate("/");
-             localStorage.clear()
+              localStorage.clear();
             }}
             className='cursor-pointer'
             src={arrowIMG}

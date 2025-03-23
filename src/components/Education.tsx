@@ -8,7 +8,6 @@ import phoneIMG from "../assets/phone.svg";
 import check from "../assets/check.svg";
 import warning from "../assets/warning.svg";
 import { useForm } from "react-hook-form";
-import { jsx } from "react/jsx-runtime";
 
 export default function Education() {
   const navigate = useNavigate();
@@ -76,17 +75,25 @@ export default function Education() {
     ? JSON.parse(storedDataExperince)
     : {};
 
-  const handleSaveInfo = (info: object | string) => {
-    if (typeof info !== "object") return;
-    localStorage.setItem("formDataExperince", JSON.stringify(info));
+  const handleSaveInfo = (info: object) => {
+    // if (typeof info !== "object") return;
+    localStorage.setItem("formDataEducation", JSON.stringify(info));
     localStorage.setItem(
       "endDateStorage",
       JSON.stringify(setEndDate)
     );
   };
-
+  const handleBackClick = () => {
+    // Save the form data on clicking "Back"
+    const formData = {
+      uni: Wuni,
+      degree: Wdegree,
+      endDate: WendDate,
+      description: Wdesciption,
+    };
+    handleSaveInfo(formData);
+  };
   const onSubmit = (data: object) => {
-    handleSaveInfo(data);
     localStorage.setItem("formDataEducation", JSON.stringify(data));
   };
 
@@ -235,7 +242,7 @@ export default function Education() {
             <div className='flex justify-between mt-[100px]'>
               <button
                 onClick={() => {
-                  handleSaveInfo("ff");
+                  handleBackClick();
                   navigate("/personal/experince");
                 }}
                 className='bg-[#6B40E3] rounded-[4px] text-white py-[10px] w-[100px]'
