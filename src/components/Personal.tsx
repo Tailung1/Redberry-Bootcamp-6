@@ -127,9 +127,9 @@ export default function Personal() {
           <img
             className='cursor-pointer'
             onClick={() => {
-              navigate("/"), localStorage.removeItem("formData");
+              navigate("/")
               localStorage.clear();
-              setImage("");
+              
             }}
             src={arrowIMG}
             alt=''
@@ -415,7 +415,7 @@ export default function Personal() {
 
       {/* Summary Section */}
 
-      <div className='flex gap-[50px] px-[50px] pt-[50px] '>
+      <div className='flex gap-[50px] px-[50px] w-1/2 pt-[50px] '>
         {/* Left text block */}
         <div className='flex flex-col gap-[20px] w-[400px]'>
           <div className='text-[34px] leading-normal flex gap-[10px] h-[40px] text-[#F93B1D]'>
@@ -454,7 +454,7 @@ export default function Personal() {
             <img
               src={image}
               alt='Uploaded'
-              className='w-[200px] h-[200px] object-cover rounded-full'
+              className='w-[240px] h-[200px] object-cover rounded-full'
             />
           )}
         </div>

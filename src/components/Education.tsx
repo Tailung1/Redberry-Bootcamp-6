@@ -139,9 +139,13 @@ export default function Education() {
       <div className='bg-[#F9F9F9] flex gap-[20px] w-1/2 py-[20px] px-[50px]'>
         <div>
           <img
-            onClick={() => localStorage.clear()}
+            onClick={() => {
+              navigate("/");
+              localStorage.clear();
+            }}
             src={arrowIMG}
             alt='arrow icon'
+            className="cursor-pointer"
           />
         </div>
         <div className='w-full flex flex-col gap-[7px]'>
@@ -429,13 +433,13 @@ export default function Education() {
         <hr className='my-[15px]' />
         <div className='flex flex-col gap-[15px]'>
           {inputCheck && (
-            <h2  className='text-red-500  text-[20px]'>Education</h2>
+            <h2 className='text-red-500  text-[20px]'>Education</h2>
           )}
           <div className='h-[40px]'>
             <div className='flex gap-[10px]'>
               <p className='text-[#1A1A1A]'>
                 {Wuni}
-                {Wuni &&","}
+                {Wuni && ","}
               </p>
               <p className='text-[#1A1A1A]'>{WdegreeRegist}</p>
             </div>
@@ -443,7 +447,10 @@ export default function Education() {
           </div>
           <p className='h-[40px]'>{Wdesciption}</p>
         </div>
-        <img className="absolute bottom-[20px] w-10 h-10" src={starIMG} />
+        <img
+          className='absolute bottom-[20px] w-10 h-10'
+          src={starIMG}
+        />
       </div>
     </div>
   );
