@@ -11,8 +11,10 @@ import { useForm } from "react-hook-form";
 
 export default function Education() {
   const navigate = useNavigate();
-
   const [endDate, setEndDate] = useState("");
+  const [degree, setDegree] = useState(""); // State to store the selected degree
+  const [degreeDropdownOpen, setDegreeDropdownOpen] = useState(false);
+  const [arrowRotation, setArrowRotation] = useState(180); // Initial arrow rotation (pointing up)
 
   useEffect(() => {
     const storagedEducation = localStorage.getItem(
@@ -22,7 +24,7 @@ export default function Education() {
       const parsedEducation = JSON.parse(storagedEducation);
       setValue("uni", parsedEducation.uni);
       setValue("endDate", parsedEducation.endDate);
-      setValue("degree", parsedEducation.degree);
+      setValue("degreeRegist", parsedEducation.degree);
       setValue("description", parsedEducation.description);
     }
 
@@ -32,6 +34,13 @@ export default function Education() {
     if (storagedFirstDate) {
       const parsedStoragedFirstDate = JSON.parse(storagedFirstDate);
       setEndDate(parsedStoragedFirstDate);
+    }
+
+    const storagedDegree = localStorage.getItem("degree");
+    if (storagedDegree) {
+      const parsedDegree = JSON.parse(storagedDegree);
+      setValue("degreeRegist", parsedDegree);
+      setDegree(parsedDegree);
     }
   }, []);
 
@@ -47,7 +56,7 @@ export default function Education() {
 
   type inputTypes = {
     uni: string;
-    degree: string;
+    degreeRegist: string;
     endDate: string;
     description: string;
   };
@@ -57,13 +66,14 @@ export default function Education() {
     setValue,
     handleSubmit,
     watch,
+    trigger,
     formState: { errors },
   } = useForm<inputTypes>();
 
   const WendDate = watch("endDate");
   const Wdesciption = watch("description");
-  const Wdegree = watch("degree");
   const Wuni = watch("uni");
+  const WdegreeRegist = watch("degreeRegist");
 
   const storedData = localStorage.getItem("formData");
   const pdp = storedData ? JSON.parse(storedData) : {};
@@ -76,32 +86,59 @@ export default function Education() {
     : {};
 
   const handleSaveInfo = (info: object) => {
-    // if (typeof info !== "object") return;
     localStorage.setItem("formDataEducation", JSON.stringify(info));
-    localStorage.setItem(
-      "endDateStorage",
-      JSON.stringify(setEndDate)
-    );
+    localStorage.setItem("endDateStorage", JSON.stringify(endDate));
+    localStorage.setItem("degreeStorage", JSON.stringify(degree));
   };
+
   const handleBackClick = () => {
-    // Save the form data on clicking "Back"
     const formData = {
       uni: Wuni,
-      degree: Wdegree,
+      degree: WdegreeRegist,
       endDate: WendDate,
       description: Wdesciption,
     };
     handleSaveInfo(formData);
   };
+
   const onSubmit = (data: object) => {
     localStorage.setItem("formDataEducation", JSON.stringify(data));
   };
 
+  // Handle dropdown toggle and arrow rotation
+  const handleInputClick = () => {
+    setDegreeDropdownOpen((prev) => !prev); // Toggle dropdown visibility
+    setArrowRotation((prev) => (prev === 0 ? 180 : 0)); // Rotate arrow up or down
+  };
+
+  // Handle degree selection
+  type DegreeOption =
+    | "Associate degree"
+    | "Bachelor's degree"
+    | "Master's degree"
+    | "Doctoral degree";
+
+  const handleDegreeClick = (selectedDegree: DegreeOption) => {
+    setDegree(selectedDegree); // Set the selected degree
+    setDegreeDropdownOpen(false); // Close the dropdown
+    setArrowRotation(180); // Rotate the arrow back up
+
+    setValue("degreeRegist", selectedDegree); // Set the hidden input
+    trigger("degreeRegist"); // Re-validate so
+    // Optional: Add a delay to let the dropdown close before resetting the arrow
+    setTimeout(() => {
+      setArrowRotation(180); // Reset the arrow to point up
+    }, 300); // Adjust this delay as necessary
+  };
   return (
     <div>
       <div className='bg-[#F9F9F9] flex gap-[20px] w-1/2 py-[20px] px-[50px]'>
         <div>
-          <img src={arrowIMG} alt='arrow icon' />
+          <img
+            onClick={() => localStorage.clear()}
+            src={arrowIMG}
+            alt='arrow icon'
+          />
         </div>
         <div className='w-full flex flex-col gap-[7px]'>
           <div className='flex justify-between w-full'>
@@ -146,20 +183,99 @@ export default function Education() {
             </div>
 
             <div className='flex w-full gap-[40px]'>
-              <div className='w-1/2 flex flex-col gap-[8px]'>
+              {""}
+              {""}
+              {""}
+
+              <div className='relative flex flex-col w-1/2 gap-[8px]'>
                 <p>Degree</p>
                 <input
-                  {...register("degree", { required: "required" })}
-                  className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full  ${
-                    errors.degree
+                  type='text'
+                  {...register("degreeRegist", { required: true })}
+                  value={degree}
+                  readOnly
+                  hidden
+                />
+
+                <div
+                  className={`relative flex items-center justify-between py-[6px] pl-[15px] pr-[30px] font-[16px] border rounded-[4px] cursor-pointer ${
+                    errors.degreeRegist
                       ? "border-[#EF5050]"
-                      : !errors.degree && Wdegree
+                      : degree
                       ? "border-[#98E37E]"
                       : "border-gray-300"
                   }`}
-                  type='text'
-                />
+                  onClick={handleInputClick}
+                >
+                  <span>{degree || "Select degree"}</span>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='w-5 h-5 text-gray-400 transition-transform duration-300'
+                    style={{
+                      transform: `rotate(${arrowRotation}deg)`,
+                    }}
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M19 9l-7 7-7-7'
+                    ></path>
+                  </svg>
+                </div>
+
+                <div
+                  className={`absolute mt-1 bg-white border border-gray-300 rounded-md shadow-md z-10 max-h-60 overflow-y-auto w-[50vw] max-w-[260px] transition-all duration-500 ease-in-out`} // Increased duration to 500ms for slower effect
+                  style={{
+                    top: "calc(100% + 5px)", // Space between input and dropdown
+                    maxHeight: degreeDropdownOpen ? "500px" : "0", // Transition max-height based on dropdown state
+                    opacity: degreeDropdownOpen ? 1 : 0, // Fade in/out based on dropdown state
+                    pointerEvents: degreeDropdownOpen
+                      ? "auto"
+                      : "none", // Prevent interaction when closed
+                  }}
+                >
+                  <div
+                    className='px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100'
+                    onClick={() =>
+                      handleDegreeClick("Associate degree")
+                    }
+                  >
+                    Associate degree
+                  </div>
+                  <div
+                    className='px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100'
+                    onClick={() =>
+                      handleDegreeClick("Bachelor's degree")
+                    }
+                  >
+                    Bachelor's degree
+                  </div>
+                  <div
+                    className='px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100'
+                    onClick={() =>
+                      handleDegreeClick("Master's degree")
+                    }
+                  >
+                    Master's degree
+                  </div>
+                  <div
+                    className='px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100'
+                    onClick={() =>
+                      handleDegreeClick("Doctoral degree")
+                    }
+                  >
+                    Doctoral degree
+                  </div>
+                </div>
               </div>
+
+              {""}
+              {""}
+              {""}
 
               <div className='w-1/2 flex flex-col gap-[8px] relative'>
                 <p>End date</p>
@@ -221,18 +337,6 @@ export default function Education() {
               ) : (
                 ""
               )}
-            </div>
-            <div className='w-1/2 p-5'>
-              <label htmlFor='dropdown'>Choose a fruit:</label>
-              <select
-                id='dropdown'
-                className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full'
-              >
-                <option value='apple'>Apple</option>
-                <option value='banana'>Banana</option>
-                <option value='orange'>Orange</option>
-                <option value='grapes'>Grapes</option>
-              </select>
             </div>
 
             <hr className='bg-[#C1C1C1] h-[1.4px]' />

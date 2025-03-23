@@ -128,7 +128,7 @@ export default function Personal() {
             className='cursor-pointer'
             onClick={() => {
               navigate("/"), localStorage.removeItem("formData");
-              localStorage.removeItem("image");
+              localStorage.clear();
               setImage("");
             }}
             src={arrowIMG}
