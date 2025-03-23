@@ -361,8 +361,11 @@ export default function Education() {
                 </p>
               )}
               <button
-              type="button"
-                onClick={() => {setShow(true),setTimeout(()=>setShow(false),3000)}}
+                type='button'
+                onClick={() => {
+                  setShow(true),
+                    setTimeout(() => setShow(false), 3000);
+                }}
                 className=' w-[280px] rounded-[4px] bg-[#62A1EB] text-[#fff] py-[15px]'
               >
                 Add other School/University
@@ -389,6 +392,11 @@ export default function Education() {
         </div>
       </div>
 
+      {""}
+      {""}
+      {""}
+      {""}
+      
       <div className='bg-[#FFF] relative flex flex-col px-[40px] pt-[40px] w-1/2'>
         <div className='flex justify-between'>
           <div className='flex flex-col gap-[15px]'>
