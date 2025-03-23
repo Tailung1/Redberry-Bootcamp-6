@@ -28,9 +28,7 @@ export default function Education() {
       setValue("description", parsedEducation.description);
     }
 
-    const storagedEndData= localStorage.getItem(
-      "endDateStorage2"
-    );
+    const storagedEndData = localStorage.getItem("endDateStorage2");
     if (storagedEndData) {
       const parsedEndData = JSON.parse(storagedEndData);
       setEndDate(parsedEndData);
@@ -75,12 +73,12 @@ export default function Education() {
   const WdegreeRegist = watch("degreeRegist");
 
   const storedData = localStorage.getItem("formData");
-  const pdp = storedData ? JSON.parse(storedData) : {};
+  const fdp = storedData ? JSON.parse(storedData) : {};
 
   const storedDataExperince = localStorage.getItem(
     "formDataExperince"
   );
-  const pde = storedDataExperince
+  const fde = storedDataExperince
     ? JSON.parse(storedDataExperince)
     : {};
 
