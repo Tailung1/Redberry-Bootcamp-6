@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import calendar from "../assets/calendar.svg";
 import arrowIMG from "../assets/arrow.svg";
 import starIMG from "../assets/star.png";
@@ -10,6 +10,7 @@ import warning from "../assets/warning.svg";
 import { useForm } from "react-hook-form";
 
 export default function Cv() {
+  const navigate = useNavigate();
   const storedPersonalData = localStorage.getItem("formData");
   const fdp = storedPersonalData
     ? JSON.parse(storedPersonalData)
@@ -28,7 +29,14 @@ export default function Cv() {
   const storedImage = localStorage.getItem("image");
   return (
     <div className='flex items-start ml-[20px] mt-[54px] mb-[129px]'>
-      <img src={arrowIMG} alt='arrow icon' />
+      <img
+        onClick={() => {
+          localStorage.clear();
+          navigate("/");
+        }}
+        src={arrowIMG}
+        alt='arrow icon'
+      />
       <div className='flex flex-col gap-[25px] border-[0.8px] ml-[27%]  px-[55px] pb-[40px] pt-[40px] border-[#000]'>
         <div className='flex items-center gap-[85px]'>
           <div className='flex flex-col gap-[15px]'>
