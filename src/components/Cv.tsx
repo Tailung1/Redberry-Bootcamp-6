@@ -37,7 +37,7 @@ export default function Cv() {
         alt='arrow icon'
       />
       <div className='flex flex-col gap-[25px] border-[0.8px] ml-[24%]  px-[55px] pb-[40px] pt-[40px] border-[#000]'>
-        <div className='flex items-center gap-[85px]'>
+        <div className='flex float-start gap-[85px]'>
           <div className='flex flex-col gap-[15px]'>
             {" "}
             <div className='flex gap-[10px] text-red-500 text-[30px]'>
@@ -101,7 +101,7 @@ export default function Cv() {
         {/*Education*/}
 
         <div className='flex flex-col gap-[15px]'>
-          <h2 className='text-red-500  text-[20px]'>Education</h2>
+          <h2 className='text-red-500  text-[30px]'>Education</h2>
           <div className='h-[40px]'>
             <div className='flex gap-[10px]'>
               <p className='text-[#1A1A1A]'>

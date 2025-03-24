@@ -39,6 +39,7 @@ export default function Education() {
     if (storagedDegree) {
       const parsedDegree = JSON.parse(storagedDegree);
       setDegree(parsedDegree);
+      setValue("degreeRegist", parsedDegree);
     }
   }, []);
 
@@ -101,7 +102,7 @@ export default function Education() {
 
   const onSubmit = (data: object) => {
     localStorage.setItem("formDataEducation", JSON.stringify(data));
-    navigate("/personal/experince/education/cv")
+    navigate("/personal/experince/education/cv");
   };
 
   // Handle dropdown toggle and arrow rotation
@@ -117,11 +118,7 @@ export default function Education() {
     | "Master's degree"
     | "Doctoral degree";
 
-    const inputCheck =
-      Wuni ||
-      WendDate||
-      Wdesciption||
-      WdegreeRegist;
+  const inputCheck = Wuni || WendDate || Wdesciption || WdegreeRegist;
 
   const handleDegreeClick = (selectedDegree: DegreeOption) => {
     setDegree(selectedDegree); // Set the selected degree
@@ -136,7 +133,7 @@ export default function Education() {
     }, 300); // Adjust this delay as necessary
   };
 
-  const [show,setShow]=useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(false);
   return (
     <div className='flex'>
       <div className='bg-[#F9F9F9] flex gap-[20px] w-1/2 py-[20px] px-[50px]'>
@@ -373,6 +370,7 @@ export default function Education() {
             </div>
             <div className='flex justify-between mt-[100px]'>
               <button
+                type='button'
                 onClick={() => {
                   handleBackClick();
                   navigate("/personal/experince");
@@ -396,7 +394,7 @@ export default function Education() {
       {""}
       {""}
       {""}
-      
+
       <div className='bg-[#FFF] relative flex flex-col px-[40px] pt-[40px] w-1/2'>
         <div className='flex justify-between'>
           <div className='flex flex-col gap-[15px]'>
