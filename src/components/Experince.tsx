@@ -17,9 +17,6 @@ export default function Experince() {
 
   const storedImage = localStorage.getItem("image");
 
-  const [firstDate, setFirstDate] = useState("");
-  const [secondDate, setSecondDate] = useState("");
-
   // Define the ref type as HTMLInputElement
   const firstDateRef = useRef<HTMLInputElement>(null);
   const secondDateRef = useRef<HTMLInputElement>(null);
@@ -30,7 +27,6 @@ export default function Experince() {
   const handleFirstDateChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setFirstDate(e.target.value);
     setValue("startDate", e.target.value);
   };
 
@@ -42,7 +38,6 @@ export default function Experince() {
   const handleSecondDateChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSecondDate(e.target.value);
     setValue("endDate", e.target.value);
   };
 
@@ -98,16 +93,10 @@ export default function Experince() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-
   useEffect(() => {
     const storagedExperince = localStorage.getItem(
       "formDataExperince"
     );
-    const storagedFirstDate = localStorage.getItem(
-      "startDateStorage"
-    );
-    const storagedSecondDate =
-      localStorage.getItem("endtDateStorage");
 
     if (storagedExperince) {
       const parsedExperince = JSON.parse(storagedExperince);
@@ -117,19 +106,7 @@ export default function Experince() {
       setValue("endDate", parsedExperince.endDate);
       setValue("description", parsedExperince.description);
     }
-
-    if (storagedFirstDate) {
-      const parsedStoragedFirstDate = JSON.parse(storagedFirstDate);
-      setFirstDate(parsedStoragedFirstDate || "");
-    }
-
-    if (storagedSecondDate) {
-      const parsedStoragedSecondDate = JSON.parse(storagedSecondDate);
-      setSecondDate(parsedStoragedSecondDate || "");
-    }
   }, []);
- 
- 
 
   const inputCheck =
     Wposition || Wemployer || Wstartdate || Wenddate || Wdescription;
@@ -140,43 +117,9 @@ export default function Experince() {
     Wenddate2 ||
     Wdescriptio2;
 
-  //   const handleSaveInfo = (info: object) => {
-  //     // if (typeof info !== "object") return;
-  //     localStorage.setItem("formDataExperince", JSON.stringify(info));
-  //     localStorage.setItem(
-  //       "startDateStorage",
-  //       JSON.stringify(firstDate)
-  //     );
-  //     localStorage.setItem(
-  //       "endtDateStorage",
-  //       JSON.stringify(secondDate)
-  //     );
-  //   };
-  const handleBackClick = () => {
-    // Save the form data on clicking "Back"
-    // const formData = {
-    //   position: Wposition,
-    //   employer: Wemployer,
-    //   startDate: Wstartdate,
-    //   endDate: Wenddate,
-    //   description: Wdescription,
-    // };
-
-    // handleSaveInfo(formData);
-    navigate("/personal");
-  };
-
-  const onSubmit = (data: object) => {
+  const onSubmit = () => {
     if (show && !inputCheck2) return;
-    localStorage.setItem("formDataExperince", JSON.stringify(data));
-    localStorage.setItem(
-      "startDateStorage",
-      JSON.stringify(firstDate)
-    );
-    localStorage.setItem(
-      "endtDateStorage",
-      JSON.stringify(secondDate)
-    );
+
     navigate("/personal/experince/education");
   };
 
@@ -293,7 +236,7 @@ export default function Experince() {
               <div className='flex flex-col relative gap-[5px] w-full'>
                 <h3>Start date</h3>
                 <input
-                value={Wstartdate}
+                  value={Wstartdate}
                   type='text'
                   placeholder='YYYY-MM-DD'
                   className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] ${
@@ -355,9 +298,9 @@ export default function Experince() {
                   ref={secondDateRef}
                   style={{ display: "none" }}
                   min={
-                    firstDate
+                    Wstartdate
                       ? new Date(
-                          new Date(firstDate).getTime() +
+                          new Date(Wstartdate).getTime() +
                             24 * 60 * 60 * 1000
                         )
                           .toISOString()
@@ -365,7 +308,7 @@ export default function Experince() {
                       : ""
                   }
                   onChange={handleSecondDateChange}
-                  disabled={!firstDate}
+                  disabled={!Wstartdate}
                 />
               </div>
             </div>
@@ -462,9 +405,9 @@ export default function Experince() {
                     ref={secondDateRef}
                     style={{ display: "none" }}
                     min={
-                      firstDate
+                      Wstartdate
                         ? new Date(
-                            new Date(firstDate).getTime() +
+                            new Date(Wstartdate).getTime() +
                               24 * 60 * 60 * 1000
                           )
                             .toISOString()
@@ -472,7 +415,7 @@ export default function Experince() {
                         : ""
                     }
                     onChange={handleSecondDateChange}
-                    disabled={!firstDate}
+                    disabled={!Wstartdate}
                   />
                 </div>
               </div>
@@ -502,7 +445,6 @@ export default function Experince() {
                 type='button'
                 onClick={() => {
                   navigate("/personal");
-                  handleBackClick();
                 }}
                 className='rounded-[4px] bg-[#6B40E3] text-white py-[7px] w-[80px]'
               >
