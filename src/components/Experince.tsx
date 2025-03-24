@@ -69,7 +69,11 @@ export default function Experince() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<inputTypes>();
+  } = useForm<inputTypes>({
+    defaultValues: JSON.parse(
+      localStorage.getItem("formDataExperince") || "{}"
+    ),
+  });
 
   const Wposition = watch("position");
   const Wemployer = watch("employer");
@@ -82,6 +86,18 @@ export default function Experince() {
   const Wstartdate2 = watch("startDate2");
   const Wenddate2 = watch("endDate2");
   const Wdescriptio2 = watch("description2");
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      localStorage.setItem(
+        "formDataExperince",
+        JSON.stringify(value)
+      );
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
 
   useEffect(() => {
     const storagedExperince = localStorage.getItem(
@@ -112,6 +128,8 @@ export default function Experince() {
       setSecondDate(parsedStoragedSecondDate || "");
     }
   }, []);
+ 
+ 
 
   const inputCheck =
     Wposition || Wemployer || Wstartdate || Wenddate || Wdescription;
@@ -122,29 +140,29 @@ export default function Experince() {
     Wenddate2 ||
     Wdescriptio2;
 
-  const handleSaveInfo = (info: object) => {
-    // if (typeof info !== "object") return;
-    localStorage.setItem("formDataExperince", JSON.stringify(info));
-    localStorage.setItem(
-      "startDateStorage",
-      JSON.stringify(firstDate)
-    );
-    localStorage.setItem(
-      "endtDateStorage",
-      JSON.stringify(secondDate)
-    );
-  };
+  //   const handleSaveInfo = (info: object) => {
+  //     // if (typeof info !== "object") return;
+  //     localStorage.setItem("formDataExperince", JSON.stringify(info));
+  //     localStorage.setItem(
+  //       "startDateStorage",
+  //       JSON.stringify(firstDate)
+  //     );
+  //     localStorage.setItem(
+  //       "endtDateStorage",
+  //       JSON.stringify(secondDate)
+  //     );
+  //   };
   const handleBackClick = () => {
     // Save the form data on clicking "Back"
-    const formData = {
-      position: Wposition,
-      employer: Wemployer,
-      startDate: Wstartdate,
-      endDate: Wenddate,
-      description: Wdescription,
-    };
+    // const formData = {
+    //   position: Wposition,
+    //   employer: Wemployer,
+    //   startDate: Wstartdate,
+    //   endDate: Wenddate,
+    //   description: Wdescription,
+    // };
 
-    handleSaveInfo(formData);
+    // handleSaveInfo(formData);
     navigate("/personal");
   };
 
@@ -275,6 +293,7 @@ export default function Experince() {
               <div className='flex flex-col relative gap-[5px] w-full'>
                 <h3>Start date</h3>
                 <input
+                value={Wstartdate}
                   type='text'
                   placeholder='YYYY-MM-DD'
                   className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] ${
@@ -284,7 +303,6 @@ export default function Experince() {
                       ? "border-[#98E37E]"
                       : "border-gray-300"
                   }`}
-                  value={firstDate}
                   readOnly
                 />
                 <img
@@ -312,6 +330,7 @@ export default function Experince() {
                 <h3>End Date</h3>
                 <input
                   type='text'
+                  value={Wenddate}
                   placeholder='YYYY-MM-DD'
                   className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] ${
                     errors.endDate && !Wenddate
@@ -320,7 +339,6 @@ export default function Experince() {
                       ? "border-[#98E37E]"
                       : "border-gray-300"
                   }`}
-                  value={secondDate}
                   readOnly
                 />
                 <img
