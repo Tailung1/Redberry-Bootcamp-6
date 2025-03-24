@@ -121,7 +121,7 @@ export default function Personal() {
 
   return (
     <div className='flex'>
-      <div className='bg-[#F9F9F9] flex flex-col w-[54%] px-[90px] py-[40px]'>
+      <div className='bg-[#F9F9F9] flex flex-col w-[54%] px-[80px] py-[40px]'>
         {/* Header Section */}
         <div className='flex w-full items-center space-x-4'>
           <img
