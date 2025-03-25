@@ -93,20 +93,7 @@ export default function Experince() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  useEffect(() => {
-    const storagedExperince = localStorage.getItem(
-      "formDataExperince"
-    );
 
-    if (storagedExperince) {
-      const parsedExperince = JSON.parse(storagedExperince);
-      setValue("position", parsedExperince.position);
-      setValue("employer", parsedExperince.employer);
-      setValue("startDate", parsedExperince.startDate);
-      setValue("endDate", parsedExperince.endDate);
-      setValue("description", parsedExperince.description);
-    }
-  }, []);
 
   const inputCheck =
     Wposition || Wemployer || Wstartdate || Wenddate || Wdescription;
