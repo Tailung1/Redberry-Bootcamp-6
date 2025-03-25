@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import calendar from "../assets/calendar.svg";
 import arrowIMG from "../assets/arrow.svg";
@@ -10,48 +10,19 @@ import warning from "../assets/warning.svg";
 import { useForm } from "react-hook-form";
 
 export default function Education() {
+  const fdp = JSON.parse(localStorage.getItem("storedData") || "{}");
+  const fde = JSON.parse(
+    localStorage.getItem("storedDataExperince") || "{}"
+  );
   const storedImage = localStorage.getItem("image");
+
   const navigate = useNavigate();
-  const [endDate, setEndDate] = useState("");
-  const [degree, setDegree] = useState(""); // State to store the selected degree
   const [degreeDropdownOpen, setDegreeDropdownOpen] = useState(false);
   const [arrowRotation, setArrowRotation] = useState(180); // Initial arrow rotation (pointing up)
-
-  useEffect(() => {
-    const storagedEducation = localStorage.getItem(
-      "formDataEducation"
-    );
-    if (storagedEducation) {
-      const parsedEducation = JSON.parse(storagedEducation);
-      setValue("uni", parsedEducation.uni);
-      setValue("endDate", parsedEducation.endDate);
-      setValue("degreeRegist", parsedEducation.degreeRegist);
-      setValue("description", parsedEducation.description);
-    }
-
-    const storagedEndData = localStorage.getItem("endDateStorage2");
-    if (storagedEndData) {
-      const parsedEndData = JSON.parse(storagedEndData);
-      setEndDate(parsedEndData);
-    }
-
-    const storagedDegree = localStorage.getItem("degreeStorage");
-    if (storagedDegree) {
-      const parsedDegree = JSON.parse(storagedDegree);
-      setDegree(parsedDegree);
-      setValue("degreeRegist", parsedDegree);
-    }
-  }, []);
 
   const endDateRef = useRef<HTMLInputElement>(null);
 
   const handleDateClick = () => endDateRef.current?.showPicker();
-  const handleDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setValue("endDate", e.target.value);
-    setEndDate(e.target.value);
-  };
 
   type inputTypes = {
     uni: string;
@@ -65,43 +36,35 @@ export default function Education() {
     setValue,
     handleSubmit,
     watch,
-    trigger,
     formState: { errors },
-  } = useForm<inputTypes>();
+  } = useForm<inputTypes>({
+    defaultValues: JSON.parse(
+      localStorage.getItem("formDataEducation") || "{}"
+    ),
+  });
 
   const WendDate = watch("endDate");
   const Wdesciption = watch("description");
   const Wuni = watch("uni");
   const WdegreeRegist = watch("degreeRegist");
 
-  const storedData = localStorage.getItem("formData");
-  const fdp = storedData ? JSON.parse(storedData) : {};
+  useEffect(() => {
+    const subscription = watch((value) =>
+      JSON.stringify(
+        localStorage.setItem(
+          "formDataEducation",
+          JSON.stringify(value)
+        )
+      )
+    );
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
-  const storedDataExperince = localStorage.getItem(
-    "formDataExperince"
-  );
-  const fde = storedDataExperince
-    ? JSON.parse(storedDataExperince)
-    : {};
+  console.log(WendDate);
+  const handleDate = (info: React.ChangeEvent<HTMLInputElement>) =>
+    setValue("endDate", info.target.value);
 
-  const handleSaveInfo = (info: object) => {
-    localStorage.setItem("formDataEducation", JSON.stringify(info));
-    localStorage.setItem("endDateStorage2", JSON.stringify(endDate));
-    localStorage.setItem("degreeStorage", JSON.stringify(degree));
-  };
-
-  const handleBackClick = () => {
-    const formData = {
-      uni: Wuni,
-      degree: WdegreeRegist,
-      endDate: WendDate,
-      description: Wdesciption,
-    };
-    handleSaveInfo(formData);
-  };
-
-  const onSubmit = (data: object) => {
-    localStorage.setItem("formDataEducation", JSON.stringify(data));
+  const onSubmit = () => {
     navigate("/personal/experince/education/cv");
   };
 
@@ -121,12 +84,12 @@ export default function Education() {
   const inputCheck = Wuni || WendDate || Wdesciption || WdegreeRegist;
 
   const handleDegreeClick = (selectedDegree: DegreeOption) => {
-    setDegree(selectedDegree); // Set the selected degree
+    // Set the selected degree
     setDegreeDropdownOpen(false); // Close the dropdown
     setArrowRotation(180); // Rotate the arrow back up
 
     setValue("degreeRegist", selectedDegree); // Set the hidden input
-    trigger("degreeRegist"); // Re-validate so
+
     // Optional: Add a delay to let the dropdown close before resetting the arrow
     setTimeout(() => {
       setArrowRotation(180); // Reset the arrow to point up
@@ -203,7 +166,7 @@ export default function Education() {
                 <input
                   type='text'
                   {...register("degreeRegist", { required: true })}
-                  value={degree}
+                  value={WdegreeRegist}
                   readOnly
                   hidden
                 />
@@ -212,13 +175,13 @@ export default function Education() {
                   className={`relative flex items-center justify-between py-[6px] pl-[15px] pr-[30px] font-[16px] border rounded-[4px] cursor-pointer ${
                     errors.degreeRegist
                       ? "border-[#EF5050]"
-                      : degree
+                      : WdegreeRegist
                       ? "border-[#98E37E]"
                       : "border-gray-300"
                   }`}
                   onClick={handleInputClick}
                 >
-                  <span>{degree || "Select degree"}</span>
+                  <span>{WdegreeRegist || "Select degree"}</span>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     className='w-5 h-5 text-gray-400 transition-transform duration-300'
@@ -299,7 +262,7 @@ export default function Education() {
                       : "border-gray-300"
                   }`}
                   type='text'
-                  value={endDate}
+                  value={WendDate}
                   placeholder='mm / dd / yyyy'
                   readOnly
                 />
@@ -310,7 +273,7 @@ export default function Education() {
                   className='hidden'
                   ref={endDateRef}
                   type='date'
-                  onChange={handleDateChange}
+                  onChange={handleDate}
                 />
                 <img
                   src={calendar}
@@ -372,7 +335,6 @@ export default function Education() {
               <button
                 type='button'
                 onClick={() => {
-                  handleBackClick();
                   navigate("/personal/experince");
                 }}
                 className='bg-[#6B40E3] rounded-[4px] text-white py-[10px] w-[100px]'
