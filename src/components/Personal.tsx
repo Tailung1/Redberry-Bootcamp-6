@@ -14,8 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Personal() {
   const navigate = useNavigate();
-const [image,setImage]=useState("")
-const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   type FormDataType = yup.InferType<typeof schema>;
 
@@ -42,16 +41,14 @@ const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
       .matches(/^[a-zA-Z0-9._%+-]+@redberry\.ge$/),
     number: yup.string().required().min(17),
     optional: yup.string(),
-    image: yup
-      .mixed<File | string>()
-      
+    image: yup.mixed<string>(),
   });
 
   const {
     register,
     handleSubmit,
     watch,
-  
+
     setValue,
     formState: { errors },
   } = useForm<FormDataType>({
@@ -66,32 +63,34 @@ const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
   const optional = watch("optional");
   const email = watch("email");
   const number = watch("number");
-
+  const Wimage = watch("image");
 
   // Only run on mount to avoid infinite loop
- useEffect(() => {
-   const storedIMG = localStorage.getItem("Storedimage");
+  useEffect(() => {
+    const storedIMG = localStorage.getItem("storedImage");
 
-   if (storedIMG) {
-     // If you stored a URL or base64 string
-     setValue("image", JSON.parse(storedIMG));
-     setImage(storedIMG);
-
-
-     // If you stored an image file URL or base64 string, you can use it like this
-     // setValue("image", JSON.parse(storedIMG));
-   }
- }, []);
+    if (storedIMG) {
+      // If you stored a URL or base64 string
+      setValue("image", JSON.parse(storedIMG));
+    }
+  }, []);
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-      setValue("image",imageUrl)
-      localStorage.setItem("Storedimage", JSON.stringify(imageUrl));
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64string = reader.result as string;
+
+        setValue("image", base64string);
+        localStorage.setItem(
+          "storedImage",
+          JSON.stringify(base64string)
+        );
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -118,11 +117,14 @@ const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
   }, [watch]);
 
   const onSubmit = (data: object) => {
-    if(!image) return
+    if (
+      !Wimage ||
+      typeof Wimage !== "string" ||
+      !Wimage.startsWith("data:image")
+    )
+      return;
     navigate("/personal/experince");
     localStorage.setItem("formData", JSON.stringify(data)); // Store form data in localStorage
-
-    
   };
   return (
     <div className='flex'>
@@ -281,7 +283,7 @@ const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
                 Upload Photo
                 <input
                   {...register("image")}
-                  type="file"
+                  type='file'
                   accept='image/*'
                   onChange={handleImageChange}
                   className='hidden' // Hide the actual input, style the label as the button
@@ -289,13 +291,18 @@ const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
               </label>
 
               {/* Show check icon if an image is uploaded, or warning icon if not */}
-              {!image && isSubmitted? (
+              {(!Wimage ||
+                typeof Wimage !== "string" ||
+                !Wimage.startsWith("data:image")) &&
+              isSubmitted ? (
                 <img
                   className='w-6 h-6'
                   src={warning}
                   alt='Warning: No image uploaded'
                 />
-              ) : image  ? (
+              ) : Wimage &&
+                typeof Wimage === "string" &&
+                Wimage.startsWith("data:image") ? (
                 <img
                   className='w-6 h-6'
                   src={check}
@@ -404,7 +411,7 @@ const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
             {/* Submit Button */}
             <div className='flex justify-end'>
               <button
-              onClick={()=>setIsSubmitted(true)}
+                onClick={() => setIsSubmitted(true)}
                 type='submit'
                 className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px] w-[30px] flex justify-center'
               >
@@ -452,13 +459,15 @@ const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
 
         {/* Image stays fixed */}
         <div>
-          {image && (
-            <img
-              src={image}
-              alt='Uploaded'
-              className='w-[240px] h-[200px] object-cover rounded-full'
-            />
-          )}
+          {Wimage &&
+            typeof Wimage === "string" &&
+            Wimage.startsWith("data:image") && (
+              <img
+                src={Wimage}
+                alt='Uploaded'
+                className='w-[240px] h-[200px] object-cover rounded-full'
+              />
+            )}
         </div>
         <img
           className='absolute bottom-[-200px] w-10 h-10'
