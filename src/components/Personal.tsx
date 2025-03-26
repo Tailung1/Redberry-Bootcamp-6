@@ -71,7 +71,7 @@ export default function Personal() {
 
     if (storedIMG) {
       // If you stored a URL or base64 string
-      setValue("image", JSON.parse(storedIMG));
+      setValue("image", storedIMG);
     }
   }, []);
 
