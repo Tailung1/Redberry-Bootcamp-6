@@ -14,7 +14,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function Personal() {
   const navigate = useNavigate();
-  const [image, setImage] = useState<null | string>(null);
+const [image,setImage]=useState("")
+const [isSubmitted,setIsSubmitted]=useState<boolean>(false)
 
   type FormDataType = yup.InferType<typeof schema>;
 
@@ -41,18 +42,23 @@ export default function Personal() {
       .matches(/^[a-zA-Z0-9._%+-]+@redberry\.ge$/),
     number: yup.string().required().min(17),
     optional: yup.string(),
-    image: yup.mixed<File>().required(),
+    image: yup
+      .mixed<File | string>()
+      
   });
 
   const {
     register,
     handleSubmit,
     watch,
+  
     setValue,
-    trigger,
     formState: { errors },
   } = useForm<FormDataType>({
     resolver: yupResolver(schema),
+    defaultValues: JSON.parse(
+      localStorage.getItem("formData") || "{}"
+    ),
   });
 
   const name = watch("name");
@@ -61,27 +67,21 @@ export default function Personal() {
   const email = watch("email");
   const number = watch("number");
 
-  useEffect(() => {
-    const savedData = localStorage.getItem("formData");
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      setValue("name", parsedData.name || "");
-      setValue("lastname", parsedData.lastname || "");
-      setValue("email", parsedData.email || "");
-      setValue("number", parsedData.number || "");
-      setValue("optional", parsedData.optional || "");
-    //   trigger();
-      // Add any other fields you want to pre-fill here
-    }
-  }, [setValue, trigger]);
 
-  useEffect(() => {
-    // Load the image from localStorage when the component mounts
-    const savedImage = localStorage.getItem("image");
-    if (savedImage) {
-      setImage(savedImage);
-    }
-  }, [setImage]); // Only run on mount to avoid infinite loop
+  // Only run on mount to avoid infinite loop
+ useEffect(() => {
+   const storedIMG = localStorage.getItem("Storedimage");
+
+   if (storedIMG) {
+     // If you stored a URL or base64 string
+     setValue("image", JSON.parse(storedIMG));
+     setImage(storedIMG);
+
+
+     // If you stored an image file URL or base64 string, you can use it like this
+     // setValue("image", JSON.parse(storedIMG));
+   }
+ }, []);
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -90,10 +90,10 @@ export default function Personal() {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
-      localStorage.setItem("image", imageUrl);
+      setValue("image",imageUrl)
+      localStorage.setItem("Storedimage", JSON.stringify(imageUrl));
     }
   };
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const numberInput = document.getElementById(
@@ -110,26 +110,30 @@ export default function Personal() {
     };
   }, []);
 
-  const onSubmit = (data: object) => {
-    if (!image) return;
+  useEffect(() => {
+    const subsription = watch((value) => {
+      localStorage.setItem("formData", JSON.stringify(value));
+    });
+    return () => subsription.unsubscribe();
+  }, [watch]);
 
+  const onSubmit = (data: object) => {
+    if(!image) return
     navigate("/personal/experince");
     localStorage.setItem("formData", JSON.stringify(data)); // Store form data in localStorage
 
-    console.log(data);
+    
   };
-
   return (
     <div className='flex'>
-      <div className='bg-[#F9F9F9] flex flex-col w-[54%] px-[75px] py-[40px]'>
+      <div className='bg-[#F9F9F9] flex flex-col w-[54%] px-[60px] py-[40px]'>
         {/* Header Section */}
         <div className='flex w-full items-center space-x-4'>
           <img
             className='cursor-pointer'
             onClick={() => {
-              navigate("/")
+              navigate("/");
               localStorage.clear();
-              
             }}
             src={arrowIMG}
             alt=''
@@ -276,10 +280,8 @@ export default function Personal() {
               <label className='cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600'>
                 Upload Photo
                 <input
-                  {...register("image", {
-                    validate: () => (image ? true : false),
-                  })}
-                  type='file'
+                  {...register("image")}
+                  type="file"
                   accept='image/*'
                   onChange={handleImageChange}
                   className='hidden' // Hide the actual input, style the label as the button
@@ -287,13 +289,13 @@ export default function Personal() {
               </label>
 
               {/* Show check icon if an image is uploaded, or warning icon if not */}
-              {isSubmitted && !image ? (
+              {!image && isSubmitted? (
                 <img
                   className='w-6 h-6'
                   src={warning}
                   alt='Warning: No image uploaded'
                 />
-              ) : image ? (
+              ) : image  ? (
                 <img
                   className='w-6 h-6'
                   src={check}
@@ -402,7 +404,7 @@ export default function Personal() {
             {/* Submit Button */}
             <div className='flex justify-end'>
               <button
-                onClick={() => setIsSubmitted(true)}
+              onClick={()=>setIsSubmitted(true)}
                 type='submit'
                 className='bg-[#6B40E3] px-[60px] py-[10px] text-[16px] text-white rounded-[4px] mt-[100px] w-[30px] flex justify-center'
               >
