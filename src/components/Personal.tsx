@@ -8,43 +8,41 @@ import warning from "../assets/warning.svg";
 import IMask from "imask"; // Import IMask
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-  import { FieldErrors } from "react-hook-form";
+import { FieldErrors } from "react-hook-form";
 
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Name input can't be empty")
+    .min(2, "Min. 2 Georgian Letters")
+    .matches(
+      /^[\u10A0-\u10FF]+$/,
+      "Only Georgian letters are allowed"
+    ),
+  lastname: yup
+    .string()
+    .required("LastName input can't be empty")
+    .min(2, "Min. 2 Georgian Letters")
+    .matches(
+      /^[\u10A0-\u10FF]+$/,
+      "Only Georgian letters are allowed"
+    ),
+  email: yup
+    .string()
+    .required("Email input can't be empty")
+    .matches(/@redberry\.ge$/),
+  number: yup.string().required().min(17),
+  optional: yup.string(),
+  image: yup.mixed<string>(),
+});
 
 export default function Personal() {
   const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   type FormDataType = yup.InferType<typeof schema>;
-
-
-  const schema = yup.object().shape({
-    name: yup
-      .string()
-      .required("Name input can't be empty")
-      .min(2, "Min. 2 Georgian Letters")
-      .matches(
-        /^[\u10A0-\u10FF]+$/,
-        "Only Georgian letters are allowed"
-      ),
-    lastname: yup
-      .string()
-      .required("LastName input can't be empty")
-      .min(2, "Min. 2 Georgian Letters")
-      .matches(
-        /^[\u10A0-\u10FF]+$/,
-        "Only Georgian letters are allowed"
-      ),
-    email: yup
-      .string()
-      .required("Email input can't be empty")
-      .matches(/^[a-zA-Z0-9._%+-]+@redberry\.ge$/),
-    number: yup.string().required().min(17),
-    optional: yup.string(),
-    image: yup.mixed<string>(),
-  });
 
   const {
     register,
@@ -125,7 +123,6 @@ export default function Personal() {
     navigate("/personal/experince");
   };
 
-
   interface FormData {
     optional?: string;
     image?: string;
@@ -135,19 +132,18 @@ export default function Personal() {
     email: string;
   }
 
-const getBorderColor = (
-  value: string,
-  errors: FieldErrors<FormData>,
-  inputName: keyof FormData
-) => {
-  if (errors[inputName]) return "border-[#EF5050]";
+  const getBorderColor = (
+    value: string,
+    errors: FieldErrors<FormData>,
+    inputName: keyof FormData
+  ) => {
+    if (errors[inputName]) return "border-[#EF5050]";
 
-  if (/^[\u10A0-\u10FF]+$/.test(value) && value.length >= 2)
-    return "border-[#98E37E]";
+    if (/^[\u10A0-\u10FF]+$/.test(value) && value.length >= 2)
+      return "border-[#98E37E]";
 
-  return "border-gray-300";
-};
-
+    return "border-gray-300";
+  };
 
   return (
     <div className='flex'>
@@ -194,7 +190,11 @@ const getBorderColor = (
                     name='name'
                     id='name'
                     placeholder={"chicha"}
-                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full  ${getBorderColor(name, errors, "name")}`}
+                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full  ${getBorderColor(
+                      name,
+                      errors,
+                      "name"
+                    )}`}
                   />
                   {/* Display check icon only when the input is valid (3+ Georgian letters) */}
                   {/^[\u10A0-\u10FF]+$/.test(name) &&
@@ -241,7 +241,11 @@ const getBorderColor = (
                     name='lastname'
                     id='lastname'
                     placeholder={"chicha"}
-                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${getBorderColor(lastName,errors,"lastname")}`}
+                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${getBorderColor(
+                      lastName,
+                      errors,
+                      "lastname"
+                    )}`}
                   />
                   {/* Display check icon only when the input is valid (3+ Georgian letters) */}
                   {!errors.lastname &&
@@ -339,8 +343,7 @@ const getBorderColor = (
                 className={`focus:outline-none focus:ring-0  border rounded-[4px] px-[15px] py-[6px] font-[16px] ${
                   errors.email
                     ? "border-[#EF5050]"
-                    : !errors.email &&
-                      email
+                    : !errors.email && email
                     ? "border-[#98E37E]"
                     : "border-gray-300"
                 }`}
@@ -348,14 +351,13 @@ const getBorderColor = (
               <p className='font-light'>
                 Email must end with @redberry.ge
               </p>
-              {email &&
-                !errors.email && (
-                  <img
-                    src={check}
-                    alt='valid'
-                    className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
-                  />
-                )}
+              {email && !errors.email && (
+                <img
+                  src={check}
+                  alt='valid'
+                  className='absolute w-5 h-5 right-2 top-1/2 transform -translate-y-1/2'
+                />
+              )}
               {/* Display warning icon outside of the input when there's an error */}
               {errors.email && (
                 <img
