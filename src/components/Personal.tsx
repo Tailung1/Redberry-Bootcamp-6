@@ -85,10 +85,7 @@ export default function Personal() {
         const base64string = reader.result as string;
 
         setValue("image", base64string);
-        localStorage.setItem(
-          "storedImage",
-          JSON.stringify(base64string)
-        );
+        localStorage.setItem("storedImage", base64string);
       };
       reader.readAsDataURL(file);
     }
@@ -116,7 +113,7 @@ export default function Personal() {
     return () => subsription.unsubscribe();
   }, [watch]);
 
-  const onSubmit = (data: object) => {
+  const onSubmit = () => {
     if (
       !Wimage ||
       typeof Wimage !== "string" ||
@@ -124,7 +121,6 @@ export default function Personal() {
     )
       return;
     navigate("/personal/experince");
-    localStorage.setItem("formData", JSON.stringify(data)); // Store form data in localStorage
   };
   return (
     <div className='flex'>
