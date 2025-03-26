@@ -32,7 +32,7 @@ const schema = yup.object().shape({
   email: yup
     .string()
     .required("Email input can't be empty")
-    .matches(/@redberry\.ge$/),
+    .matches(/^[a-zA-Z0-9._%+-]+@redberry\.ge$/),
   number: yup.string().required().min(17),
   optional: yup.string(),
   image: yup.mixed<string>(),
@@ -343,7 +343,7 @@ export default function Personal() {
                 className={`focus:outline-none focus:ring-0  border rounded-[4px] px-[15px] py-[6px] font-[16px] ${
                   errors.email
                     ? "border-[#EF5050]"
-                    : !errors.email && email
+                    : !errors.email && email && /^[a-zA-Z0-9._%+-]+@redberry\.ge$/.test(email)
                     ? "border-[#98E37E]"
                     : "border-gray-300"
                 }`}
@@ -351,7 +351,7 @@ export default function Personal() {
               <p className='font-light'>
                 Email must end with @redberry.ge
               </p>
-              {email && !errors.email && (
+              {email && !errors.email && /^[a-zA-Z0-9._%+-]+@redberry\.ge$/.test(email) && (
                 <img
                   src={check}
                   alt='valid'

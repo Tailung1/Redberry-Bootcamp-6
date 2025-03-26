@@ -15,7 +15,7 @@ export default function Experince() {
   const [show, setShow] = useState<boolean>(false);
   const [page, setPage] = useState<number>(3);
 
-  const storedImage = localStorage.getItem("image");
+  const storedImage = localStorage.getItem("storedImage");
 
   // Define the ref type as HTMLInputElement
   const firstDateRef = useRef<HTMLInputElement>(null);
@@ -355,6 +355,7 @@ export default function Experince() {
                     placeholder='YYYY-MM-DD'
                     className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
                     readOnly
+                    value={Wstartdate2}
                   />
                   <img
                     src={calendar}
@@ -379,6 +380,7 @@ export default function Experince() {
                     placeholder='YYYY-MM-DD'
                     className='focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px]'
                     readOnly
+                    value={Wenddate2}
                   />
                   <img
                     src={calendar}

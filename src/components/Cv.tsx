@@ -23,7 +23,7 @@ export default function Cv() {
   const storedEducation = localStorage.getItem("formDataEducation");
   const fded = storedEducation ? JSON.parse(storedEducation) : {};
 
-  const storedImage = localStorage.getItem("image");
+  const storedImage = localStorage.getItem("storedImage");
   const [show, setShow] = useState<boolean>(true);
   return (
     <div className='flex items-start ml-[40px] mt-[54px]  mb-[229px]'>

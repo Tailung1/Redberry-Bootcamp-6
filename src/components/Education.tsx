@@ -10,11 +10,11 @@ import warning from "../assets/warning.svg";
 import { useForm } from "react-hook-form";
 
 export default function Education() {
-  const fdp = JSON.parse(localStorage.getItem("storedData") || "{}");
+  const fdp = JSON.parse(localStorage.getItem("formData") || "{}");
   const fde = JSON.parse(
-    localStorage.getItem("storedDataExperince") || "{}"
+    localStorage.getItem("formDataExperince") || "{}"
   );
-  const storedImage = localStorage.getItem("image");
+  const storedImage = localStorage.getItem("storedImage");
 
   const navigate = useNavigate();
   const [degreeDropdownOpen, setDegreeDropdownOpen] = useState(false);
