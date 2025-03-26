@@ -8,6 +8,7 @@ import warning from "../assets/warning.svg";
 import IMask from "imask"; // Import IMask
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+  import { FieldErrors } from "react-hook-form";
 
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ export default function Personal() {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   type FormDataType = yup.InferType<typeof schema>;
+
 
   const schema = yup.object().shape({
     name: yup
@@ -122,6 +124,31 @@ export default function Personal() {
       return;
     navigate("/personal/experince");
   };
+
+
+  interface FormData {
+    optional?: string;
+    image?: string;
+    number: string;
+    name: string;
+    lastname: string;
+    email: string;
+  }
+
+const getBorderColor = (
+  value: string,
+  errors: FieldErrors<FormData>,
+  inputName: keyof FormData
+) => {
+  if (errors[inputName]) return "border-[#EF5050]";
+
+  if (/^[\u10A0-\u10FF]+$/.test(value) && value.length >= 2)
+    return "border-[#98E37E]";
+
+  return "border-gray-300";
+};
+
+
   return (
     <div className='flex'>
       <div className='bg-[#F9F9F9] flex flex-col w-[54%] px-[60px] py-[40px]'>
@@ -167,15 +194,7 @@ export default function Personal() {
                     name='name'
                     id='name'
                     placeholder={"chicha"}
-                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full  ${
-                      errors.name
-                        ? "border-[#EF5050]"
-                        : /^[\u10A0-\u10FF]+$/.test(name) &&
-                          !errors.name &&
-                          name.length >= 2
-                        ? "border-[#98E37E]"
-                        : "border-gray-300"
-                    }`}
+                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full  ${getBorderColor(name, errors, "name")}`}
                   />
                   {/* Display check icon only when the input is valid (3+ Georgian letters) */}
                   {/^[\u10A0-\u10FF]+$/.test(name) &&
@@ -222,19 +241,7 @@ export default function Personal() {
                     name='lastname'
                     id='lastname'
                     placeholder={"chicha"}
-                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${
-                      errors.lastname || !lastName?.length
-                        ? "pr-[50px]" // Padding for error state
-                        : "pr-[30px]" // Default padding
-                    } ${
-                      errors.lastname
-                        ? "border-[#EF5050]"
-                        : /^[\u10A0-\u10FF]+$/.test(lastName) &&
-                          !errors.lastname &&
-                          lastName.length >= 2
-                        ? "border-[#98E37E]"
-                        : "border-gray-300"
-                    }`}
+                    className={`focus:outline-none focus:ring-0 pl-[15px] pr-[30px] py-[6px] font-[16px] border rounded-[4px] w-full ${getBorderColor(lastName,errors,"lastname")}`}
                   />
                   {/* Display check icon only when the input is valid (3+ Georgian letters) */}
                   {!errors.lastname &&
@@ -333,7 +340,7 @@ export default function Personal() {
                   errors.email
                     ? "border-[#EF5050]"
                     : !errors.email &&
-                      /^[a-zA-Z0-9._%+-]+@redberry\.ge$/.test(email)
+                      email
                     ? "border-[#98E37E]"
                     : "border-gray-300"
                 }`}
@@ -341,7 +348,7 @@ export default function Personal() {
               <p className='font-light'>
                 Email must end with @redberry.ge
               </p>
-              {/^[a-zA-Z0-9._%+-]+@redberry\.ge$/.test(email) &&
+              {email &&
                 !errors.email && (
                   <img
                     src={check}
